@@ -1,0 +1,26 @@
+id: "retail-006"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "multi-step"
+user_goal: "Change the shipping address on order A1045 to 9 MG Road, Pune."
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 5
+expected_state:
+  orders:
+    - id: "A1045"
+      status: "placed"
+      shipping_city: "Pune"
+      shipping_address: "9 MG Road"
+reference_solution:
+  final_answer: "Order A1045 will ship to 9 MG Road, Pune."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1045"
+    - tool: "update_address"
+      arguments:
+        order_id: "A1045"
+        address: "9 MG Road"
+        city: "Pune"

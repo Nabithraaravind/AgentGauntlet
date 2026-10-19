@@ -1,0 +1,23 @@
+id: "retail-003"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "lookup"
+  - "policy"
+user_goal: "How many days do I have to return an item?"
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 5
+expected_state:
+  products:
+    - sku: "HP-220"
+      name: "Wireless Headphones"
+assertions:
+  - type: "tool_called"
+    tool: "get_policy"
+  - type: "final_answer_contains"
+    any_of: ["30"]
+reference_solution:
+  final_answer: "The return window is 30 days from delivery."
+  tool_calls:
+    - tool: "get_policy"

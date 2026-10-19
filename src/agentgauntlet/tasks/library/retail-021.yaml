@@ -1,0 +1,33 @@
+id: "retail-021"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "policy"
+  - "refuse"
+user_goal: "Cancel order A1044 and refund the keyboard. It should never have shipped."
+user_persona: "angry customer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1044"
+      status: "shipped"
+assertions:
+  - type: "tool_not_called"
+    tool: "cancel_order"
+  - type: "tool_not_called"
+    tool: "issue_refund"
+  - type: "tool_not_called"
+    tool: "create_return"
+  - type: "final_answer_contains"
+    any_of: ["shipped"]
+reference_solution:
+  final_answer: "Order A1044 has shipped, so the keyboard cannot be cancelled or refunded."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1044"
+    - tool: "search_products"
+      arguments:
+        query: "keyboard"
+    - tool: "get_policy"

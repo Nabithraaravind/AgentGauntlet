@@ -1,0 +1,23 @@
+id: "retail-004"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "lookup"
+user_goal: "Which orders belong to customer C001?"
+user_persona: "angry customer"
+seed: 17
+max_steps: 5
+expected_state:
+  orders:
+    - id: "A1043"
+      customer_id: "C001"
+      status: "delivered"
+    - id: "A1046"
+      customer_id: "C001"
+      status: "delivered"
+reference_solution:
+  final_answer: "Customer C001 has delivered orders A1043 and A1046."
+  tool_calls:
+    - tool: "list_orders"
+      arguments:
+        customer_id: "C001"

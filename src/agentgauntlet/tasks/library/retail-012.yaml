@@ -1,0 +1,47 @@
+id: "retail-012"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "multi-step"
+  - "refund"
+user_goal: "Return both items on order A1043 and refund the full 3298 rupees to the original payment in one refund."
+user_persona: "angry customer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+    - order_id: "A1043"
+      product_sku: "CH-110"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 3298
+      method: "original"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned both items and refunded 3298 rupees to the original payment."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "CH-110"
+        reason: "Changed my mind"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 3298
+        method: "original"

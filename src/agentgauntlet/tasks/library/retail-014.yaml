@@ -1,0 +1,31 @@
+id: "retail-014"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "refund"
+  - "error-recovery"
+user_goal: "Refund 2499 rupees on order A1043 to the original payment. Do not create a return."
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "delivered"
+assertions:
+  - type: "table_unchanged"
+    table: "refunds"
+  - type: "table_unchanged"
+    table: "returns"
+reference_solution:
+  final_answer: "A refund needs a return first, so nothing was refunded."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"
+      expect_error: "return_required"

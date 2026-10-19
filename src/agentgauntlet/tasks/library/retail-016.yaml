@@ -1,0 +1,27 @@
+id: "retail-016"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "ambiguous"
+user_goal: "Order A1045 is wrong. Either cancel it or send it to a different city. I am not sure which."
+user_persona: "angry customer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1045"
+      status: "placed"
+      shipping_city: "Chennai"
+assertions:
+  - type: "tool_not_called"
+    tool: "cancel_order"
+  - type: "tool_not_called"
+    tool: "update_address"
+  - type: "final_answer_contains"
+    any_of: ["which", "clarify"]
+reference_solution:
+  final_answer: "Which change do you want: cancel the order, or update the address?"
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1045"

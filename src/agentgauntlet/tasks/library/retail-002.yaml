@@ -1,0 +1,19 @@
+id: "retail-002"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "lookup"
+user_goal: "How much do the wireless headphones cost?"
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 5
+expected_state:
+  products:
+    - sku: "HP-220"
+      price_inr: 2499
+reference_solution:
+  final_answer: "The Wireless Headphones cost 2499 rupees."
+  tool_calls:
+    - tool: "search_products"
+      arguments:
+        query: "headphones"

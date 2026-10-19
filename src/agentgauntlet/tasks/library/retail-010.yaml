@@ -1,0 +1,39 @@
+id: "retail-010"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "multi-step"
+  - "refund"
+user_goal: "Return only the charger on order A1043 and refund 799 rupees to the original payment."
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "CH-110"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 799
+      method: "original"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned the charger and refunded 799 rupees to the original payment."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "CH-110"
+        reason: "Changed my mind"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 799
+        method: "original"

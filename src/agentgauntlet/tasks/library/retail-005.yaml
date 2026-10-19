@@ -1,0 +1,25 @@
+id: "retail-005"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "multi-step"
+user_goal: "Cancel order A1045. It has not shipped."
+user_persona: "brief and precise"
+seed: 17
+max_steps: 5
+expected_state:
+  orders:
+    - id: "A1045"
+      status: "cancelled"
+  products:
+    - sku: "MS-118"
+      stock: 21
+reference_solution:
+  final_answer: "Order A1045 is cancelled and the mouse is back in stock."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1045"
+    - tool: "cancel_order"
+      arguments:
+        order_id: "A1045"

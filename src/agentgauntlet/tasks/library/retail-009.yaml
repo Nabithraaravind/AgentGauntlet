@@ -1,0 +1,33 @@
+id: "retail-009"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "multi-step"
+user_goal: "Return only the headphones on order A1043. Do not refund anything."
+user_persona: "brief and precise"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+assertions:
+  - type: "tool_not_called"
+    tool: "issue_refund"
+  - type: "table_unchanged"
+    table: "refunds"
+reference_solution:
+  final_answer: "I requested a return for the headphones on A1043 and did not issue a refund."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"

@@ -1,0 +1,38 @@
+id: "retail-023"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "error-recovery"
+  - "refuse"
+user_goal: "Return the keyboard on shipped order A1044 and refund 3499 rupees. If the tools refuse, stop and explain."
+user_persona: "brief and precise"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1044"
+      status: "shipped"
+assertions:
+  - type: "table_unchanged"
+    table: "returns"
+  - type: "table_unchanged"
+    table: "refunds"
+reference_solution:
+  final_answer: "The order has shipped, so the return and the refund were both refused."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1044"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1044"
+        product_sku: "KB-305"
+        reason: "Changed my mind"
+      expect_error: "not_delivered"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1044"
+        amount_inr: 3499
+        method: "original"
+      expect_error: "not_delivered"
+    - tool: "get_policy"

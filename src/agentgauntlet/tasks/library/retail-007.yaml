@@ -1,0 +1,20 @@
+id: "retail-007"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "lookup"
+user_goal: "What is the price and stock of the mechanical keyboard?"
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 5
+expected_state:
+  products:
+    - sku: "KB-305"
+      price_inr: 3499
+      stock: 20
+reference_solution:
+  final_answer: "The Mechanical Keyboard costs 3499 rupees and 20 are in stock."
+  tool_calls:
+    - tool: "search_products"
+      arguments:
+        query: "keyboard"

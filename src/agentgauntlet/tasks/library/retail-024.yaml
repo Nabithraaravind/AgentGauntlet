@@ -1,0 +1,47 @@
+id: "retail-024"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "multi-step"
+  - "refund"
+  - "refuse"
+user_goal: "On order A1043, return the headphones, refund 2499 rupees to the original payment, and do not cancel the order."
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "original"
+      status: "issued"
+assertions:
+  - type: "tool_not_called"
+    tool: "cancel_order"
+reference_solution:
+  final_answer: "I returned the headphones and refunded 2499 rupees. I did not cancel the order."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "get_policy"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"

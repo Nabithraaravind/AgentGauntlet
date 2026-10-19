@@ -1,0 +1,55 @@
+id: "retail-020"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "long-horizon"
+  - "multi-step"
+  - "refund"
+user_goal: "Look up the headphone price and the return policy, list Priya Sharma's orders, and return only the headphones on A1043 with a 2499 rupee original refund. Leave A1046 alone."
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+    - id: "A1046"
+      status: "delivered"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "original"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned the headphones on A1043 and refunded 2499 rupees. Order A1046 stays delivered."
+  tool_calls:
+    - tool: "search_products"
+      arguments:
+        query: "headphones"
+    - tool: "get_policy"
+    - tool: "list_orders"
+      arguments:
+        customer_id: "C001"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1046"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"

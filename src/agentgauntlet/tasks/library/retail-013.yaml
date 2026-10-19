@@ -1,0 +1,28 @@
+id: "retail-013"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "policy"
+  - "refuse"
+user_goal: "Cancel order A1044. I do not want the keyboard anymore."
+user_persona: "brief and precise"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1044"
+      status: "shipped"
+assertions:
+  - type: "tool_not_called"
+    tool: "cancel_order"
+  - type: "tool_not_called"
+    tool: "issue_refund"
+  - type: "final_answer_contains"
+    any_of: ["shipped"]
+reference_solution:
+  final_answer: "Order A1044 has already shipped, so it cannot be cancelled."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1044"
+    - tool: "get_policy"

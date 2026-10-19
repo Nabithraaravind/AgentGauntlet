@@ -1,0 +1,28 @@
+id: "retail-022"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "ambiguous"
+user_goal: "Something on order A1043 is wrong and I want to return it. I did not say which item."
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "delivered"
+assertions:
+  - type: "tool_not_called"
+    tool: "create_return"
+  - type: "tool_not_called"
+    tool: "issue_refund"
+  - type: "final_answer_contains"
+    any_of: ["which"]
+  - type: "table_unchanged"
+    table: "returns"
+reference_solution:
+  final_answer: "Which item should I return: the headphones or the charger?"
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"

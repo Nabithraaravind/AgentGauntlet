@@ -1,0 +1,39 @@
+id: "retail-011"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "multi-step"
+  - "refund"
+user_goal: "Return the bottles on order A1047 and issue 998 rupees of store credit."
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1047"
+      status: "returned"
+  returns:
+    - order_id: "A1047"
+      product_sku: "BT-501"
+      status: "requested"
+  refunds:
+    - order_id: "A1047"
+      amount_inr: 998
+      method: "store_credit"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned the bottles and issued 998 rupees of store credit."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1047"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1047"
+        product_sku: "BT-501"
+        reason: "Item damaged"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1047"
+        amount_inr: 998
+        method: "store_credit"

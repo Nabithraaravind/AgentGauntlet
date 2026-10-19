@@ -1,0 +1,46 @@
+id: "retail-017"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "multi-step"
+  - "refund"
+user_goal: "The headphones on order A1043 do not fit. Return only those and refund the original payment. Keep the charger."
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "original"
+      status: "issued"
+assertions:
+  - type: "tool_not_called"
+    tool: "cancel_order"
+  - type: "max_tool_calls"
+    value: 8
+  - type: "final_answer_contains"
+    any_of: ["refund", "return"]
+reference_solution:
+  final_answer: "I returned the headphones and refunded 2499 rupees to the original payment. The charger stays on the order."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"

@@ -1,0 +1,45 @@
+id: "retail-019"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "refund"
+  - "error-recovery"
+user_goal: "Return the headphones on order A1043. First try to refund 99999 rupees, then refund the correct 2499."
+user_persona: "brief and precise"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "original"
+      status: "issued"
+reference_solution:
+  final_answer: "The 99999 rupee refund was too large. I issued 2499 rupees instead."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 99999
+        method: "original"
+      expect_error: "amount_exceeds_returned"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"

@@ -1,0 +1,30 @@
+id: "retail-015"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "policy"
+  - "refuse"
+user_goal: "Return the kurta on order A1046."
+user_persona: "polite but impatient customer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1046"
+      status: "delivered"
+assertions:
+  - type: "table_unchanged"
+    table: "returns"
+reference_solution:
+  final_answer: "Order A1046 is outside the 30-day return window."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1046"
+    - tool: "get_policy"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1046"
+        product_sku: "BK-014"
+        reason: "Did not fit"
+      expect_error: "return_window_closed"

@@ -1,0 +1,66 @@
+id: "retail-025"
+domain: "retail"
+difficulty: "hard"
+tags:
+  - "long-horizon"
+  - "refund"
+user_goal: "Read the policy, inspect order A1043, confirm the headphone and charger prices, return both lines, and issue two original refunds of 2499 and 799 rupees."
+user_persona: "angry customer"
+seed: 17
+max_steps: 15
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+    - order_id: "A1043"
+      product_sku: "CH-110"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "original"
+      status: "issued"
+    - order_id: "A1043"
+      amount_inr: 799
+      method: "original"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned both items and issued two refunds, 2499 and 799 rupees."
+  tool_calls:
+    - tool: "get_policy"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "search_products"
+      arguments:
+        query: "headphones"
+    - tool: "search_products"
+      arguments:
+        query: "charger"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "CH-110"
+        reason: "Changed my mind"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "original"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 799
+        method: "original"
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"

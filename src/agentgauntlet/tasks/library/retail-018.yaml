@@ -1,0 +1,39 @@
+id: "retail-018"
+domain: "retail"
+difficulty: "medium"
+tags:
+  - "multi-step"
+  - "refund"
+user_goal: "Return the headphones on order A1043 and give me 2499 rupees of store credit."
+user_persona: "confused first-time buyer"
+seed: 17
+max_steps: 10
+expected_state:
+  orders:
+    - id: "A1043"
+      status: "partially_returned"
+  returns:
+    - order_id: "A1043"
+      product_sku: "HP-220"
+      status: "requested"
+  refunds:
+    - order_id: "A1043"
+      amount_inr: 2499
+      method: "store_credit"
+      status: "issued"
+reference_solution:
+  final_answer: "I returned the headphones and issued 2499 rupees of store credit."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1043"
+    - tool: "create_return"
+      arguments:
+        order_id: "A1043"
+        product_sku: "HP-220"
+        reason: "Did not fit"
+    - tool: "issue_refund"
+      arguments:
+        order_id: "A1043"
+        amount_inr: 2499
+        method: "store_credit"

@@ -1,0 +1,19 @@
+id: "retail-008"
+domain: "retail"
+difficulty: "easy"
+tags:
+  - "lookup"
+user_goal: "Has order A1047 been delivered?"
+user_persona: "angry customer"
+seed: 17
+max_steps: 5
+expected_state:
+  orders:
+    - id: "A1047"
+      status: "delivered"
+reference_solution:
+  final_answer: "Order A1047 is delivered."
+  tool_calls:
+    - tool: "get_order"
+      arguments:
+        order_id: "A1047"
