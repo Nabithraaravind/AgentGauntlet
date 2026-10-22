@@ -134,15 +134,21 @@ The HTML report is one file. Inline SVG keeps it readable offline and avoids emb
 
 ## ADR-019: A missing model is not a score
 
-**Status:** accepted (M11)
+**Status:** accepted (M11), partially superseded by measured qwen run
 
-`experiments.PLANNED_MODELS` lists six models. `model_status` asks a caller-supplied ping. `docs/results.md` says none of them were called here. `results/` has no JSON score files.
+`experiments.PLANNED_MODELS` lists six models. `model_status` asks a caller-supplied ping. After Ollama was installed, `ollama/qwen2.5:7b-instruct` was graded into `results/`. Other planned models stay ungraded until their runs finish. Numbers are never invented.
 
 ## ADR-020: Version 0.1.0 is not a PyPI upload by itself
 
-**Status:** accepted (M12)
+**Status:** accepted (M12), blocked on the package name
 
-The package version is `0.1.0`. The release workflow builds the wheel and publishes it on a `v*` tag with PyPI trusted publishing. That workflow has not been run. The Gradio app only displays files already in `results/`.
+The package version is `0.1.0`. The release workflow builds the wheel and publishes it on a `v*` tag with PyPI trusted publishing. The GitHub environment `pypi` exists. Publishing is still blocked: the name `agentgauntlet` on PyPI belongs to an unrelated chaos-engineering project at version 0.2.0. This repo must rename its distribution or obtain that name before a `v*` tag can publish.
+
+## ADR-021: Helpers for recording measured runs
+
+**Status:** accepted
+
+`tasks/record_run.py` grades a finished run directory into `results/`. `tasks/measure_asr.py` runs every attack and guardrail for one model. Both write only after a real call finishes.
 
 
 

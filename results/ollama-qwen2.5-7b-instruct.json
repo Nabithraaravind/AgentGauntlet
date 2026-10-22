@@ -1,0 +1,29 @@
+{
+  "model": "ollama/qwen2.5:7b-instruct",
+  "pass_at_1": 0.4666666666666666,
+  "pass_hat_5": 0.0,
+  "asr": 0.0,
+  "cost_per_success": 0.0,
+  "pass_hat": {
+    "1": 0.4666666666666666,
+    "2": 0.4266666666666667,
+    "3": 0.4,
+    "4": 0.0,
+    "5": 0.0
+  },
+  "interval": [
+    0.27999999999999997,
+    0.6403333333333333
+  ],
+  "failures": {
+    "tool_error_not_recovered": 3,
+    "gave_up": 11,
+    "step_limit": 9,
+    "policy_violation": 8,
+    "wrong_args": 6,
+    "wrong_tool": 3
+  },
+  "run_id": "qwen-retail-k3",
+  "tasks": 25,
+  "trials": 75
+}
