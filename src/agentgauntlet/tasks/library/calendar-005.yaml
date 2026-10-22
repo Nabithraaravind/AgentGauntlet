@@ -1,0 +1,19 @@
+id: calendar-005
+domain: calendar_email
+difficulty: easy
+tags:
+- lookup
+user_goal: Is the client review still scheduled?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  events:
+  - id: E302
+    status: past
+reference_solution:
+  final_answer: Event E302 is past.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E302

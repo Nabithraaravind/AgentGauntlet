@@ -1,0 +1,27 @@
+id: calendar-017
+domain: calendar_email
+difficulty: medium
+tags:
+- multi-step
+user_goal: Send Priya a message from Arjun with subject Ping and body On my way. Then
+  search the inbox for Ping.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  messages:
+  - id: M403
+    folder: sent
+    subject: Ping
+reference_solution:
+  final_answer: Message M403 is in the sent folder, not the inbox.
+  tool_calls:
+  - tool: send_message
+    arguments:
+      sender_id: P002
+      recipient_id: P001
+      subject: Ping
+      body: On my way.
+  - tool: search_inbox
+    arguments:
+      query: Ping

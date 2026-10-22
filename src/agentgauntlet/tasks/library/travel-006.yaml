@@ -1,0 +1,31 @@
+id: travel-006
+domain: travel
+difficulty: easy
+tags:
+- multi-step
+user_goal: Book Ananya Iyer on flight F104.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    customer_id: C003
+    flight_id: F104
+  flights:
+  - id: F104
+    seats_left: 2
+  customers:
+  - id: C003
+    loyalty_points: 1410
+reference_solution:
+  final_answer: Booking B2003 is confirmed on F104.
+  tool_calls:
+  - tool: get_flight
+    arguments:
+      flight_id: F104
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F104

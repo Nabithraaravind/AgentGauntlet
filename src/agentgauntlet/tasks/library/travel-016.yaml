@@ -1,0 +1,29 @@
+id: travel-016
+domain: travel
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Redeem 500 points for Arjun, or fewer if he does not have enough.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  customers:
+  - id: C002
+    loyalty_points: 150
+  loyalty_events:
+  - customer_id: C002
+    points: 50
+    kind: redeem
+reference_solution:
+  final_answer: 500 was too many, so I redeemed 50. Arjun has 150 points.
+  tool_calls:
+  - tool: redeem_points
+    arguments:
+      customer_id: C002
+      points: 500
+    expect_error: insufficient_points
+  - tool: redeem_points
+    arguments:
+      customer_id: C002
+      points: 50

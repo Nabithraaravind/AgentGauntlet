@@ -1,0 +1,25 @@
+id: calendar-022
+domain: calendar_email
+difficulty: hard
+tags:
+- error-recovery
+user_goal: Cancel the client review. If you cannot, cancel the standup instead.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  events:
+  - id: E302
+    status: past
+  - id: E301
+    status: cancelled
+reference_solution:
+  final_answer: The review is past. I cancelled the standup instead.
+  tool_calls:
+  - tool: cancel_event
+    arguments:
+      event_id: E302
+    expect_error: cannot_cancel
+  - tool: cancel_event
+    arguments:
+      event_id: E301

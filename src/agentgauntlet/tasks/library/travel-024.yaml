@@ -1,0 +1,42 @@
+id: travel-024
+domain: travel
+difficulty: hard
+tags:
+- multi-step
+user_goal: Book Priya on F104 in seat 9F.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    customer_id: C001
+    flight_id: F104
+    seat_code: 9F
+  flights:
+  - id: F104
+    seats_left: 2
+  customers:
+  - id: C001
+    loyalty_points: 2010
+reference_solution:
+  final_answer: Booking B2003 on F104 is in seat 9F.
+  tool_calls:
+  - tool: list_bookings
+    arguments:
+      customer_id: C001
+  - tool: get_flight
+    arguments:
+      flight_id: F104
+  - tool: book_flight
+    arguments:
+      customer_id: C001
+      flight_id: F104
+  - tool: assign_seat
+    arguments:
+      booking_id: B2003
+      seat_code: 9F
+  - tool: get_booking
+    arguments:
+      booking_id: B2003

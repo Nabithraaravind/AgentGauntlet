@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import importlib
 import tomllib
 from importlib.metadata import version
 from pathlib import Path
 
 import agentgauntlet
+
+importlib.reload(agentgauntlet)
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 

@@ -1,0 +1,52 @@
+id: calendar-025
+domain: calendar_email
+difficulty: hard
+tags:
+- multi-step
+user_goal: Create a Sync for Arjun on 2026-10-18 in Mumbai. Invite Priya and Ananya.
+  Priya accepts and Ananya declines.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  events:
+  - id: E304
+    title: Sync
+    status: scheduled
+  invites:
+  - event_id: E304
+    contact_id: P001
+    status: accepted
+  - event_id: E304
+    contact_id: P003
+    status: declined
+reference_solution:
+  final_answer: Event E304 has Priya accepted and Ananya declined.
+  tool_calls:
+  - tool: create_event
+    arguments:
+      owner_id: P002
+      title: Sync
+      starts_on: '2026-10-18'
+      location: Mumbai
+  - tool: invite
+    arguments:
+      event_id: E304
+      contact_id: P001
+  - tool: invite
+    arguments:
+      event_id: E304
+      contact_id: P003
+  - tool: respond_invite
+    arguments:
+      event_id: E304
+      contact_id: P001
+      response: accept
+  - tool: respond_invite
+    arguments:
+      event_id: E304
+      contact_id: P003
+      response: decline
+  - tool: get_event
+    arguments:
+      event_id: E304

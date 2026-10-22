@@ -1,0 +1,27 @@
+id: calendar-013
+domain: calendar_email
+difficulty: medium
+tags:
+- multi-step
+user_goal: Create a Review event for Ananya on 2026-11-02 in Chennai.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E304
+    owner_id: P003
+    title: Review
+    status: scheduled
+reference_solution:
+  final_answer: Created event E304.
+  tool_calls:
+  - tool: create_event
+    arguments:
+      owner_id: P003
+      title: Review
+      starts_on: '2026-11-02'
+      location: Chennai
+  - tool: get_event
+    arguments:
+      event_id: E304

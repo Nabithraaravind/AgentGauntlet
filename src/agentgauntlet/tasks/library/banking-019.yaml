@@ -1,0 +1,46 @@
+id: banking-019
+domain: banking
+difficulty: hard
+tags:
+- multi-step
+user_goal: Add Cafe 555666777, verify the payee, and send 25000 rupees from AC01 with
+  confirmation.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  payees:
+  - id: PY04
+    verified: 1
+  transfers:
+  - id: T502
+    amount_inr: 25000
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 55000
+reference_solution:
+  final_answer: Cafe is verified. Transfer T502 for 25000 rupees is posted and the
+    balance is 55000.
+  tool_calls:
+  - tool: add_payee
+    arguments:
+      name: Cafe
+      account_number: '555666777'
+  - tool: verify_payee
+    arguments:
+      payee_id: PY04
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY04
+      amount_inr: 25000
+  - tool: confirm_transfer
+    arguments:
+      transfer_id: T502
+  - tool: get_account
+    arguments:
+      account_id: AC01

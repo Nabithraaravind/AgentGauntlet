@@ -1,0 +1,28 @@
+id: travel-018
+domain: travel
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Book Priya on F101 again. She wants a second seat.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2001
+    flight_id: F101
+    status: booked
+reference_solution:
+  final_answer: Priya already has booking B2001 on that flight.
+  tool_calls:
+  - tool: list_bookings
+    arguments:
+      customer_id: C001
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: book_flight
+- type: table_unchanged
+  table: bookings

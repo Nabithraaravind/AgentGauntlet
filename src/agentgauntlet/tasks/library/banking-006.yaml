@@ -1,0 +1,28 @@
+id: banking-006
+domain: banking
+difficulty: easy
+tags:
+- multi-step
+user_goal: Transfer 5000 rupees from AC01 to the landlord.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 75000
+  transfers:
+  - id: T502
+    amount_inr: 5000
+    status: posted
+reference_solution:
+  final_answer: Transferred 5000 rupees to the landlord. The balance is 75000.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 5000

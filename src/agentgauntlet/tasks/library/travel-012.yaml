@@ -1,0 +1,32 @@
+id: travel-012
+domain: travel
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Book Ananya on F102, or another BLR to MAA flight if it is full.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    flight_id: F104
+  flights:
+  - id: F104
+    seats_left: 2
+  customers:
+  - id: C003
+    loyalty_points: 1410
+reference_solution:
+  final_answer: F102 is full, so I booked F104 as B2003.
+  tool_calls:
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F102
+    expect_error: full
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F104

@@ -1,0 +1,23 @@
+id: travel-011
+domain: travel
+difficulty: medium
+tags:
+- ambiguous
+user_goal: Book me a flight tomorrow.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  flights:
+  - id: F104
+    seats_left: 3
+reference_solution:
+  final_answer: Which origin and destination should I book?
+  tool_calls:
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: book_flight
+- type: table_unchanged
+  table: bookings

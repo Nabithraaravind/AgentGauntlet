@@ -75,6 +75,8 @@ def grade_run(tasks: list[Task], runs_dir: Path, run_id: str) -> list[TrialObser
     observations: list[TrialObservation] = []
     for task in tasks:
         template = template_path(runs_dir, run_id, task.id)
+        if not template.is_file():
+            continue
         before = domain_for(task.domain, template, seed=task.seed).snapshot()
         trial = 0
         while True:

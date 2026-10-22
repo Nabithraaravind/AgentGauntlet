@@ -1,0 +1,32 @@
+id: calendar-012
+domain: calendar_email
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Create a Planning event for Arjun on 2026-09-01 in Hyderabad. If that date
+  is past, use 2026-10-30.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E304
+    owner_id: P002
+    starts_on: '2026-10-30'
+    status: scheduled
+reference_solution:
+  final_answer: That date is past. I created E304 on 2026-10-30.
+  tool_calls:
+  - tool: create_event
+    arguments:
+      owner_id: P002
+      title: Planning
+      starts_on: '2026-09-01'
+      location: Hyderabad
+    expect_error: in_the_past
+  - tool: create_event
+    arguments:
+      owner_id: P002
+      title: Planning
+      starts_on: '2026-10-30'
+      location: Hyderabad

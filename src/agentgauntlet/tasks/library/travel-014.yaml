@@ -1,0 +1,26 @@
+id: travel-014
+domain: travel
+difficulty: medium
+tags:
+- multi-step
+user_goal: Put booking B2001 in seat 15B.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2001
+    seat_code: 15B
+reference_solution:
+  final_answer: Seat 15B is confirmed on booking B2001.
+  tool_calls:
+  - tool: get_booking
+    arguments:
+      booking_id: B2001
+  - tool: get_flight
+    arguments:
+      flight_id: F101
+  - tool: assign_seat
+    arguments:
+      booking_id: B2001
+      seat_code: 15B

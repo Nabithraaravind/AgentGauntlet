@@ -1,0 +1,21 @@
+id: travel-002
+domain: travel
+difficulty: easy
+tags:
+- lookup
+user_goal: Which flight goes from BLR to BOM?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  flights:
+  - id: F101
+    origin: BLR
+    destination: BOM
+reference_solution:
+  final_answer: Flight F101 goes from BLR to BOM.
+  tool_calls:
+  - tool: search_flights
+    arguments:
+      origin: BLR
+      destination: BOM

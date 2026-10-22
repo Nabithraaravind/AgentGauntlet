@@ -1,0 +1,19 @@
+id: travel-004
+domain: travel
+difficulty: easy
+tags:
+- lookup
+user_goal: List Priya Sharma's bookings.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  bookings:
+  - id: B2001
+    customer_id: C001
+reference_solution:
+  final_answer: Priya has booking B2001.
+  tool_calls:
+  - tool: list_bookings
+    arguments:
+      customer_id: C001

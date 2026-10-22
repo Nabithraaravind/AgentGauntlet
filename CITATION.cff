@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: AgentGauntlet
+message: If you use AgentGauntlet, cite it as below.
+type: software
+version: 0.1.0
+license: MIT
+repository-code: https://github.com/Nabithraaravind/AgentGauntlet
+authors:
+  - name: AgentGauntlet contributors

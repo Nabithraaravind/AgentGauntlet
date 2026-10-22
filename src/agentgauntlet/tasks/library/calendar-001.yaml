@@ -1,0 +1,19 @@
+id: calendar-001
+domain: calendar_email
+difficulty: easy
+tags:
+- lookup
+user_goal: What is the title of event E301?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  events:
+  - id: E301
+    title: Team standup
+reference_solution:
+  final_answer: Event E301 is Team standup.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E301

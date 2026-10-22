@@ -1,0 +1,32 @@
+id: calendar-018
+domain: calendar_email
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Create a Clash event for Priya on 2026-10-03 in Pune. If that overlaps,
+  use 2026-11-05.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E304
+    owner_id: P001
+    starts_on: '2026-11-05'
+    status: scheduled
+reference_solution:
+  final_answer: 2026-10-03 clashes with the standup. I created E304 on 2026-11-05.
+  tool_calls:
+  - tool: create_event
+    arguments:
+      owner_id: P001
+      title: Clash
+      starts_on: '2026-10-03'
+      location: Pune
+    expect_error: overlap
+  - tool: create_event
+    arguments:
+      owner_id: P001
+      title: Clash
+      starts_on: '2026-11-05'
+      location: Pune

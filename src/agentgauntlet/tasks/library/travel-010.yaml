@@ -1,0 +1,27 @@
+id: travel-010
+domain: travel
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Cancel booking B2002. The trip is over.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2002
+    status: completed
+reference_solution:
+  final_answer: Booking B2002 is completed, so it cannot be cancelled.
+  tool_calls:
+  - tool: get_booking
+    arguments:
+      booking_id: B2002
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: cancel_booking
+- type: table_unchanged
+  table: bookings

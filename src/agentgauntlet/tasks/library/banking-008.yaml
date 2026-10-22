@@ -1,0 +1,28 @@
+id: banking-008
+domain: banking
+difficulty: easy
+tags:
+- multi-step
+user_goal: Transfer 1000 rupees from AC02 to Sister.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC02
+    balance_inr: 11000
+  transfers:
+  - id: T502
+    amount_inr: 1000
+    status: posted
+reference_solution:
+  final_answer: Transferred 1000 rupees to Sister. The balance is 11000.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC02
+  - tool: transfer
+    arguments:
+      account_id: AC02
+      payee_id: PY03
+      amount_inr: 1000

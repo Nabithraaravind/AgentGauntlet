@@ -1,0 +1,41 @@
+id: travel-022
+domain: travel
+difficulty: hard
+tags:
+- multi-step
+- policy
+user_goal: Book Ananya on F101, then cancel that new booking. Leave the points in
+  place.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2003
+    status: cancelled
+  flights:
+  - id: F101
+    seats_left: 4
+  customers:
+  - id: C003
+    loyalty_points: 1350
+  loyalty_events:
+  - customer_id: C003
+    points: 450
+    kind: earn
+reference_solution:
+  final_answer: Booking B2003 was cancelled. The loyalty points stay.
+  tool_calls:
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F101
+  - tool: get_booking
+    arguments:
+      booking_id: B2003
+  - tool: cancel_booking
+    arguments:
+      booking_id: B2003
+  - tool: get_flight
+    arguments:
+      flight_id: F101

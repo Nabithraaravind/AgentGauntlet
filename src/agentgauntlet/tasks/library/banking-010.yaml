@@ -1,0 +1,28 @@
+id: banking-010
+domain: banking
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Transfer 100 rupees from frozen account AC03 to the landlord.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  accounts:
+  - id: AC03
+    frozen: 1
+    balance_inr: 5000
+reference_solution:
+  final_answer: Account AC03 is frozen, so I cannot transfer.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC03
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: transfer
+- type: table_unchanged
+  table: transfers

@@ -1,0 +1,19 @@
+id: calendar-003
+domain: calendar_email
+difficulty: easy
+tags:
+- lookup
+user_goal: Find the inbox message about notes.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  messages:
+  - id: M401
+    folder: inbox
+reference_solution:
+  final_answer: The inbox has Standup notes from Friday.
+  tool_calls:
+  - tool: search_inbox
+    arguments:
+      query: notes

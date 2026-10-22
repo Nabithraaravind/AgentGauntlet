@@ -1,0 +1,52 @@
+id: travel-020
+domain: travel
+difficulty: hard
+tags:
+- long-horizon
+- multi-step
+user_goal: Book Ananya from BLR to MAA on F104 in seat 16C, after you check the policy
+  and her bookings.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    customer_id: C003
+    seat_code: 16C
+  flights:
+  - id: F104
+    seats_left: 2
+  customers:
+  - id: C003
+    loyalty_points: 1410
+reference_solution:
+  final_answer: Booked F104 as B2003 in seat 16C. Two seats remain.
+  tool_calls:
+  - tool: search_flights
+    arguments:
+      origin: BLR
+      destination: MAA
+  - tool: get_flight
+    arguments:
+      flight_id: F104
+  - tool: get_policy
+    arguments: {}
+  - tool: list_bookings
+    arguments:
+      customer_id: C003
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F104
+  - tool: get_booking
+    arguments:
+      booking_id: B2003
+  - tool: assign_seat
+    arguments:
+      booking_id: B2003
+      seat_code: 16C
+  - tool: get_flight
+    arguments:
+      flight_id: F104

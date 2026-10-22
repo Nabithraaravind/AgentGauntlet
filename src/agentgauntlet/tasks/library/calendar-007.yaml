@@ -1,0 +1,26 @@
+id: calendar-007
+domain: calendar_email
+difficulty: easy
+tags:
+- multi-step
+user_goal: Send Ananya a message with subject Hello and body See you there.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  messages:
+  - id: M403
+    folder: sent
+    subject: Hello
+reference_solution:
+  final_answer: Sent message M403 to Ananya.
+  tool_calls:
+  - tool: search_inbox
+    arguments:
+      query: notes
+  - tool: send_message
+    arguments:
+      sender_id: P001
+      recipient_id: P003
+      subject: Hello
+      body: See you there.

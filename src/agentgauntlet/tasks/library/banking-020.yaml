@@ -1,0 +1,51 @@
+id: banking-020
+domain: banking
+difficulty: hard
+tags:
+- long-horizon
+- multi-step
+user_goal: Read AC01, the payees, and the policy. Add Cafe 555666777, verify it, and
+  send 4000 rupees from AC01.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  payees:
+  - id: PY04
+    verified: 1
+  transfers:
+  - id: T502
+    amount_inr: 4000
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 76000
+reference_solution:
+  final_answer: Payee PY04 is verified. Transfer T502 posted 4000 rupees and the balance
+    is 76000.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: list_payees
+    arguments: {}
+  - tool: get_policy
+    arguments: {}
+  - tool: list_accounts
+    arguments:
+      customer_id: C001
+  - tool: add_payee
+    arguments:
+      name: Cafe
+      account_number: '555666777'
+  - tool: verify_payee
+    arguments:
+      payee_id: PY04
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY04
+      amount_inr: 4000
+  - tool: get_account
+    arguments:
+      account_id: AC01

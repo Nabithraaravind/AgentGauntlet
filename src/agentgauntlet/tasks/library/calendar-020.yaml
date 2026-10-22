@@ -1,0 +1,53 @@
+id: calendar-020
+domain: calendar_email
+difficulty: hard
+tags:
+- long-horizon
+- multi-step
+user_goal: Check the offsite, invite Arjun, accept, send him a note, and confirm the
+  inbox notes are still there.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  invites:
+  - event_id: E303
+    contact_id: P002
+    status: accepted
+  messages:
+  - id: M401
+    folder: inbox
+  - id: M403
+    folder: sent
+reference_solution:
+  final_answer: Arjun accepted the offsite. Message M403 is sent, and the inbox still
+    has the standup notes.
+  tool_calls:
+  - tool: list_events
+    arguments: {}
+  - tool: get_event
+    arguments:
+      event_id: E303
+  - tool: get_policy
+    arguments: {}
+  - tool: invite
+    arguments:
+      event_id: E303
+      contact_id: P002
+  - tool: respond_invite
+    arguments:
+      event_id: E303
+      contact_id: P002
+      response: accept
+  - tool: send_message
+    arguments:
+      sender_id: P001
+      recipient_id: P002
+      subject: Offsite
+      body: See you in Chennai.
+  - tool: search_inbox
+    arguments:
+      query: notes
+  - tool: get_event
+    arguments:
+      event_id: E303

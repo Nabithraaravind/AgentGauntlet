@@ -1,0 +1,19 @@
+id: calendar-004
+domain: calendar_email
+difficulty: easy
+tags:
+- lookup
+- policy
+user_goal: Can I schedule an event yesterday?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  events:
+  - id: E302
+    status: past
+reference_solution:
+  final_answer: Create an event only on 2026-10-01 or later.
+  tool_calls:
+  - tool: get_policy
+    arguments: {}

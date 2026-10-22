@@ -1,0 +1,19 @@
+id: travel-005
+domain: travel
+difficulty: easy
+tags:
+- lookup
+user_goal: How many seats are left on flight F102?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  flights:
+  - id: F102
+    seats_left: 0
+reference_solution:
+  final_answer: Flight F102 has no seats left.
+  tool_calls:
+  - tool: get_flight
+    arguments:
+      flight_id: F102

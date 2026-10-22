@@ -1,0 +1,27 @@
+id: banking-023
+domain: banking
+difficulty: hard
+tags:
+- policy
+- refuse
+user_goal: Confirm transfer T501.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  transfers:
+  - id: T501
+    status: posted
+reference_solution:
+  final_answer: Transfer T501 is already posted, so there is nothing to confirm.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: confirm_transfer
+- type: table_unchanged
+  table: accounts

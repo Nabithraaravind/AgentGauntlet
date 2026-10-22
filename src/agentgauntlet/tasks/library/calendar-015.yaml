@@ -1,0 +1,25 @@
+id: calendar-015
+domain: calendar_email
+difficulty: medium
+tags:
+- multi-step
+user_goal: Decline Arjun's standup invite.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  invites:
+  - event_id: E301
+    contact_id: P002
+    status: declined
+reference_solution:
+  final_answer: Arjun declined the standup.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E301
+  - tool: respond_invite
+    arguments:
+      event_id: E301
+      contact_id: P002
+      response: decline

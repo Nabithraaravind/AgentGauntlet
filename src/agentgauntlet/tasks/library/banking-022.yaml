@@ -1,0 +1,40 @@
+id: banking-022
+domain: banking
+difficulty: hard
+tags:
+- multi-step
+user_goal: Start a 26000 rupee transfer from AC01 to the landlord, cancel it, then
+  send 1500 rupees to Sister.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  transfers:
+  - id: T502
+    status: rejected
+  - id: T503
+    amount_inr: 1500
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 78500
+reference_solution:
+  final_answer: The large transfer was cancelled. T503 posted 1500 rupees and the
+    balance is 78500.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 26000
+  - tool: cancel_transfer
+    arguments:
+      transfer_id: T502
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY03
+      amount_inr: 1500
+  - tool: get_account
+    arguments:
+      account_id: AC01

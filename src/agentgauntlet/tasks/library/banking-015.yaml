@@ -1,0 +1,32 @@
+id: banking-015
+domain: banking
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Send 15000 rupees from AC02 to Sister. If the balance is too low, send
+  4000.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  accounts:
+  - id: AC02
+    balance_inr: 8000
+  transfers:
+  - id: T502
+    amount_inr: 4000
+    status: posted
+reference_solution:
+  final_answer: 15000 was too much. I sent 4000 rupees. The balance is 8000.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC02
+      payee_id: PY03
+      amount_inr: 15000
+    expect_error: insufficient_funds
+  - tool: transfer
+    arguments:
+      account_id: AC02
+      payee_id: PY03
+      amount_inr: 4000

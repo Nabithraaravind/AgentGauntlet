@@ -21,13 +21,15 @@ from tempfile import TemporaryDirectory
 from mcp import Client
 from mcp.types import CallToolResult, TextContent
 
-from agentgauntlet.domains.retail import RetailDomain
+from agentgauntlet.domains.registry import UnknownDomainError, domain_for
 from agentgauntlet.grading.assertions import check_assertions
 from agentgauntlet.grading.state_diff import partial_match, values_equal
 from agentgauntlet.tasks.loader import load_tasks
-from agentgauntlet.tasks.schema import Difficulty, Task
+from agentgauntlet.tasks.schema import Difficulty, DomainName, Task
 
 RETAIL_TASK_COUNT = 25
+TASK_COUNT = 25
+DOMAINS: tuple[DomainName, ...] = ("retail", "travel", "calendar_email", "banking")
 DIFFICULTY_QUOTA: dict[Difficulty, int] = {"easy": 8, "medium": 10, "hard": 7}
 REQUIRED_TAGS = frozenset(
     {
@@ -43,22 +45,32 @@ REQUIRED_TAGS = frozenset(
 )
 LONG_HORIZON_MIN_CALLS = 8
 RETAIL_TABLES = frozenset({"customers", "order_items", "orders", "products", "refunds", "returns"})
+TRAVEL_TABLES = frozenset({"bookings", "customers", "flights", "loyalty_events"})
+CALENDAR_TABLES = frozenset({"contacts", "events", "invites", "messages"})
+BANKING_TABLES = frozenset({"accounts", "customers", "payees", "transfers"})
+DOMAIN_TABLES: dict[DomainName, frozenset[str]] = {
+    "retail": RETAIL_TABLES,
+    "travel": TRAVEL_TABLES,
+    "calendar_email": CALENDAR_TABLES,
+    "banking": BANKING_TABLES,
+}
 
 # Callers import the matcher from this module. The implementation lives in grading.
 __all__ = ["partial_match", "values_equal"]
 
 
 def check_library(tasks: list[Task]) -> list[str]:
-    """Check ids, the retail quota, tags, and that each reference fits ``max_steps``."""
+    """Check ids, each domain's quota, tags, and that each reference fits ``max_steps``."""
     problems: list[str] = []
-    retail = [task for task in tasks if task.domain == "retail"]
-    if len(retail) != RETAIL_TASK_COUNT:
-        problems.append(f"expected {RETAIL_TASK_COUNT} retail tasks, found {len(retail)}")
-    counts = Counter(task.difficulty for task in retail)
-    for difficulty, quota in DIFFICULTY_QUOTA.items():
-        found = counts[difficulty]
-        if found != quota:
-            problems.append(f"expected {quota} {difficulty} retail tasks, found {found}")
+    for name in DOMAINS:
+        subset = [task for task in tasks if task.domain == name]
+        if len(subset) != TASK_COUNT:
+            problems.append(f"expected {TASK_COUNT} {name} tasks, found {len(subset)}")
+        counts = Counter(task.difficulty for task in subset)
+        for difficulty, quota in DIFFICULTY_QUOTA.items():
+            found = counts[difficulty]
+            if found != quota:
+                problems.append(f"expected {quota} {difficulty} {name} tasks, found {found}")
     seen: set[str] = set()
     tags: set[str] = set()
     for task in tasks:
@@ -75,8 +87,7 @@ def check_library(tasks: list[Task]) -> list[str]:
             problems.append(
                 f"{task.id}: long-horizon tasks need at least {LONG_HORIZON_MIN_CALLS} tool calls"
             )
-        if task.domain == "retail":
-            problems.extend(_unknown_tables(task))
+        problems.extend(_unknown_tables(task))
     missing = REQUIRED_TAGS - tags
     if missing:
         problems.append(f"library is missing tags: {', '.join(sorted(missing))}")
@@ -98,9 +109,10 @@ def _collect_replays(tasks: list[Task]) -> list[str]:
 
 async def replay_task(task: Task, db_path: Path) -> list[str]:
     """Run one reference solution against a fresh database and return problems."""
-    if task.domain != "retail":
+    try:
+        domain = domain_for(task.domain, db_path, seed=task.seed)
+    except UnknownDomainError:
         return [f"{task.id}: domain {task.domain!r} has no world yet"]
-    domain = RetailDomain(db_path, seed=task.seed)
     domain.setup()
     server = domain.mcp_server()
     # Refused tool calls are part of the reference. The server logs each one at INFO.
@@ -131,14 +143,21 @@ async def replay_task(task: Task, db_path: Path) -> list[str]:
 
 
 def _unknown_tables(task: Task) -> list[str]:
+    known = DOMAIN_TABLES.get(task.domain)
+    if known is None:
+        return []
     problems: list[str] = []
     for table in task.expected_state:
-        if table not in RETAIL_TABLES:
-            problems.append(f"{task.id}: expected_state table {table!r} is not a retail table")
+        if table not in known:
+            problems.append(
+                f"{task.id}: expected_state table {table!r} is not a {task.domain} table"
+            )
     for assertion in task.assertions:
         table_name = assertion.table
-        if assertion.type == "table_unchanged" and table_name not in RETAIL_TABLES:
-            problems.append(f"{task.id}: table_unchanged {table_name!r} is not a retail table")
+        if assertion.type == "table_unchanged" and table_name not in known:
+            problems.append(
+                f"{task.id}: table_unchanged {table_name!r} is not a {task.domain} table"
+            )
     return problems
 
 

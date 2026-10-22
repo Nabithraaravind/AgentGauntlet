@@ -1,0 +1,32 @@
+id: banking-012
+domain: banking
+difficulty: medium
+tags:
+- error-recovery
+user_goal: Send 2000 rupees from AC01 to Unknown Shop. If that payee is unverified,
+  send it to the landlord.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 78000
+  transfers:
+  - id: T502
+    payee_id: PY01
+    status: posted
+reference_solution:
+  final_answer: Unknown Shop is not verified. I sent 2000 rupees to the landlord instead.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY02
+      amount_inr: 2000
+    expect_error: unverified_payee
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 2000

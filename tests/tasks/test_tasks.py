@@ -19,6 +19,7 @@ from agentgauntlet.tasks.replay import (
     _check_assertions,
     _replay_all,
     _result_text,
+    _unknown_tables,
     check_library,
     partial_match,
     replay_task,
@@ -126,6 +127,13 @@ def test_loader_rejects_bad_files(tmp_path: Path) -> None:
         parse_task(tmp_path / "retail-098")
 
 
+def test_library_has_one_hundred_tasks() -> None:
+    """Each of the four domains has 25 tasks and the difficulty quota."""
+    tasks = load_tasks()
+    assert len(tasks) == 100
+    assert check_library(tasks) == []
+
+
 def test_retail_table_names_match_a_live_snapshot(tmp_path: Path) -> None:
     """Expected-state keys are the real tables, so a renamed table fails this test."""
     domain = RetailDomain(tmp_path / "world.sqlite", seed=17)
@@ -157,6 +165,14 @@ def test_check_library_reports_quota_duplicates_and_unknown_tables() -> None:
     assert "library is missing tags" in text
 
 
+def test_unknown_domain_has_no_table_catalog() -> None:
+    """A domain with no world has no table list to check."""
+    data = _sample().model_dump()
+    data["domain"] = "space"
+    data["id"] = "space-001"
+    assert _unknown_tables(Task.model_construct(**data)) == []
+
+
 def test_assertions_flag_a_reference_that_breaks_its_own_rules() -> None:
     """Forbidden tools, missing phrases, and a changed table are all reported."""
     task = _sample()
@@ -177,9 +193,12 @@ def test_assertions_flag_a_reference_that_breaks_its_own_rules() -> None:
 async def test_replay_reports_unreachable_state_and_wrong_errors(tmp_path: Path) -> None:
     """A reference that cancels a delivered order, or expects the wrong code, is a problem."""
     task = next(item for item in load_tasks() if item.id == "retail-001")
-    travel = task.model_copy(update={"domain": "travel", "id": "travel-001"})
-    assert await replay_task(travel, tmp_path / "travel.sqlite") == [
-        "travel-001: domain 'travel' has no world yet"
+    data = task.model_dump()
+    data["domain"] = "space"
+    data["id"] = "space-001"
+    ghost = Task.model_construct(**data)
+    assert await replay_task(ghost, tmp_path / "space.sqlite") == [
+        "space-001: domain 'space' has no world yet"
     ]
 
     cancelled = task.model_copy(
@@ -237,11 +256,11 @@ async def test_replay_reports_unreachable_state_and_wrong_errors(tmp_path: Path)
     assert any("cancel_order failed" in problem for problem in blown)
 
 
-def test_validate_library_accepts_every_retail_task() -> None:
+def test_validate_library_accepts_every_task() -> None:
     """Every packaged reference solution reaches its expected state."""
     problems, count = validate_library()
     assert problems == []
-    assert count == 25
+    assert count == 100
 
 
 async def test_replay_all_records_an_unexpected_exception(

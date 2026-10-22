@@ -10,10 +10,12 @@ Example:
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from agentgauntlet.agents.mcp_client import ToolSpec
 from agentgauntlet.tasks.schema import JsonScalar, Task
 
 
@@ -55,6 +57,10 @@ class Action(BaseModel):
     arguments: dict[str, JsonScalar] = Field(default_factory=dict)
     expect_error: str | None = None
     final_answer: str | None = None
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    cost_usd: float | None = None
+    latency_ms: float | None = None
 
     @model_validator(mode="after")
     def one_outcome(self) -> Action:
@@ -71,5 +77,14 @@ class Agent(Protocol):
 
     name: str
 
-    async def act(self, task: Task, history: list[StepRecord]) -> Action:
-        """Choose the next tool call, or the final answer."""
+    async def act(
+        self,
+        task: Task,
+        history: list[StepRecord],
+        tools: Sequence[ToolSpec] | None = None,
+    ) -> Action:
+        """Choose the next tool call, or the final answer.
+
+        ``tools`` is the schema list from the trial's MCP server. Agents that
+        follow a script can ignore it.
+        """

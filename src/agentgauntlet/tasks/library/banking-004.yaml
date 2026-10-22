@@ -1,0 +1,19 @@
+id: banking-004
+domain: banking
+difficulty: easy
+tags:
+- lookup
+- policy
+user_goal: When does a transfer need confirmation?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 80000
+reference_solution:
+  final_answer: A transfer above 20000 rupees stays pending until it is confirmed.
+  tool_calls:
+  - tool: get_policy
+    arguments: {}

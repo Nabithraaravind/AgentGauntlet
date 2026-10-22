@@ -1,0 +1,36 @@
+id: travel-023
+domain: travel
+difficulty: hard
+tags:
+- policy
+- refuse
+user_goal: Book Ananya on departed flight F103 and redeem 100 of her points.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  flights:
+  - id: F103
+    status: departed
+  customers:
+  - id: C003
+    loyalty_points: 800
+  loyalty_events:
+  - customer_id: C003
+    points: 100
+    kind: redeem
+reference_solution:
+  final_answer: F103 has departed, so I did not book it. Ananya has 800 points.
+  tool_calls:
+  - tool: get_flight
+    arguments:
+      flight_id: F103
+  - tool: get_policy
+    arguments: {}
+  - tool: redeem_points
+    arguments:
+      customer_id: C003
+      points: 100
+assertions:
+- type: tool_not_called
+  tool: book_flight

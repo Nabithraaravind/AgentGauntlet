@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Sequence
 from pathlib import Path
 
 import pytest
@@ -13,7 +14,7 @@ from mcp.types import CallToolResult, TextContent
 from pydantic import ValidationError
 
 from agentgauntlet.agents import Action, ScriptedAgent, StepRecord
-from agentgauntlet.agents.mcp_client import ToolSession, message_text
+from agentgauntlet.agents.mcp_client import ToolSession, ToolSpec, message_text
 from agentgauntlet.runner import RunConfig, RunSummary, TrialOutcome, run_benchmark
 from agentgauntlet.runner.__main__ import main
 from agentgauntlet.runner.engine import format_summary
@@ -85,13 +86,13 @@ def test_action_and_run_id_reject_bad_values() -> None:
 
 
 def test_clone_matches_the_template_and_unknown_worlds_fail(tmp_path: Path) -> None:
-    """A trial copy starts equal to the template. Travel has no world yet."""
+    """A trial copy starts equal to the template. An unknown world is refused."""
     world = materialize_world("retail", tmp_path / "template.sqlite", seed=17)
     clone_database(world.db_path, tmp_path / "copy.sqlite")
     copy = domain_for("retail", tmp_path / "copy.sqlite", seed=17)
     assert copy.snapshot() == world.snapshot()
     with pytest.raises(UnknownDomainError):
-        domain_for("travel", tmp_path / "travel.sqlite", seed=17)
+        domain_for("space", tmp_path / "space.sqlite", seed=17)
 
 
 def test_message_text_and_unfinished_files(tmp_path: Path) -> None:
@@ -199,7 +200,12 @@ async def test_runner_stops_at_the_step_limit_timeout_and_agent_errors(
     class SlowAgent:
         name = "slow"
 
-        async def act(self, task: Task, history: list[StepRecord]) -> Action:
+        async def act(
+            self,
+            task: Task,
+            history: list[StepRecord],
+            tools: Sequence[ToolSpec] | None = None,
+        ) -> Action:
             await asyncio.sleep(5)
             return Action(final_answer="late")
 
@@ -213,7 +219,12 @@ async def test_runner_stops_at_the_step_limit_timeout_and_agent_errors(
     class BoomAgent:
         name = "boom"
 
-        async def act(self, task: Task, history: list[StepRecord]) -> Action:
+        async def act(
+            self,
+            task: Task,
+            history: list[StepRecord],
+            tools: Sequence[ToolSpec] | None = None,
+        ) -> Action:
             raise RuntimeError("disk full")
 
     blown = await run_benchmark([_task("retail-001")], BoomAgent(), _config(tmp_path / "boom"))
@@ -223,7 +234,12 @@ async def test_runner_stops_at_the_step_limit_timeout_and_agent_errors(
     class EmptyAgent:
         name = "empty"
 
-        async def act(self, task: Task, history: list[StepRecord]) -> Action:
+        async def act(
+            self,
+            task: Task,
+            history: list[StepRecord],
+            tools: Sequence[ToolSpec] | None = None,
+        ) -> Action:
             return Action.model_construct()
 
     empty = await run_benchmark([_task("retail-001")], EmptyAgent(), _config(tmp_path / "empty"))
@@ -233,7 +249,12 @@ async def test_runner_stops_at_the_step_limit_timeout_and_agent_errors(
     class OneCallAgent:
         name = "once"
 
-        async def act(self, task: Task, history: list[StepRecord]) -> Action:
+        async def act(
+            self,
+            task: Task,
+            history: list[StepRecord],
+            tools: Sequence[ToolSpec] | None = None,
+        ) -> Action:
             return Action(tool="get_order", arguments={"order_id": "A1043"})
 
     async def hang(self: ToolSession, tool: str, arguments: dict[str, object]) -> None:
@@ -249,11 +270,15 @@ async def test_runner_stops_at_the_step_limit_timeout_and_agent_errors(
 
 
 async def test_unknown_domain_is_a_recorded_error(tmp_path: Path) -> None:
-    """A travel task does not abort the run. The trial file explains why."""
-    travel = _task("retail-001").model_copy(update={"domain": "travel", "id": "travel-001"})
-    summary = await run_benchmark([travel], ScriptedAgent(), _config(tmp_path))
+    """A task for a missing world does not abort the run. The trial file explains why."""
+    base = _task("retail-001")
+    data = base.model_dump()
+    data["domain"] = "space"
+    data["id"] = "space-001"
+    ghost = Task.model_construct(**data)
+    summary = await run_benchmark([ghost], ScriptedAgent(), _config(tmp_path))
     assert summary.trials[0].status == "error"
-    assert "travel" in summary.trials[0].path.read_text(encoding="utf-8")
+    assert "space" in summary.trials[0].path.read_text(encoding="utf-8")
 
 
 async def test_scripted_retail_run_reaches_every_expected_state(tmp_path: Path) -> None:

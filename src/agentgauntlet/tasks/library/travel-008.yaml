@@ -1,0 +1,26 @@
+id: travel-008
+domain: travel
+difficulty: easy
+tags:
+- multi-step
+user_goal: Redeem 200 loyalty points for Priya Sharma.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  customers:
+  - id: C001
+    loyalty_points: 1300
+  loyalty_events:
+  - customer_id: C001
+    points: 200
+    kind: redeem
+reference_solution:
+  final_answer: Priya now has 1300 points.
+  tool_calls:
+  - tool: get_policy
+    arguments: {}
+  - tool: redeem_points
+    arguments:
+      customer_id: C001
+      points: 200

@@ -1,0 +1,31 @@
+id: banking-017
+domain: banking
+difficulty: medium
+tags:
+- multi-step
+user_goal: Send 22000 rupees from AC01 to Sister and confirm it.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  transfers:
+  - id: T502
+    amount_inr: 22000
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 58000
+reference_solution:
+  final_answer: Transfer T502 for 22000 rupees is posted. The balance is 58000.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY03
+      amount_inr: 22000
+  - tool: confirm_transfer
+    arguments:
+      transfer_id: T502
+  - tool: get_account
+    arguments:
+      account_id: AC01

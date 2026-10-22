@@ -1,0 +1,30 @@
+id: calendar-021
+domain: calendar_email
+difficulty: hard
+tags:
+- multi-step
+user_goal: Invite Arjun to the offsite and then cancel the offsite.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  events:
+  - id: E303
+    status: cancelled
+  invites:
+  - event_id: E303
+    contact_id: P002
+    status: pending
+reference_solution:
+  final_answer: The offsite is cancelled. Arjun's invite is still on file.
+  tool_calls:
+  - tool: invite
+    arguments:
+      event_id: E303
+      contact_id: P002
+  - tool: cancel_event
+    arguments:
+      event_id: E303
+  - tool: get_event
+    arguments:
+      event_id: E303

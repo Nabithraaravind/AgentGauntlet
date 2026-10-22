@@ -1,0 +1,19 @@
+id: banking-005
+domain: banking
+difficulty: easy
+tags:
+- lookup
+user_goal: Is account AC03 frozen?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC03
+    frozen: 1
+reference_solution:
+  final_answer: Account AC03 is frozen.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC03

@@ -1,0 +1,19 @@
+id: travel-003
+domain: travel
+difficulty: easy
+tags:
+- lookup
+- policy
+user_goal: Can a departed flight be booked?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  flights:
+  - id: F103
+    status: departed
+reference_solution:
+  final_answer: A departed flight cannot be booked.
+  tool_calls:
+  - tool: get_policy
+    arguments: {}

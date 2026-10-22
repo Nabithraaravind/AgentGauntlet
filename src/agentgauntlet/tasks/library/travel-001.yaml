@@ -1,0 +1,19 @@
+id: travel-001
+domain: travel
+difficulty: easy
+tags:
+- lookup
+user_goal: What is the status of booking B2001?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  bookings:
+  - id: B2001
+    status: booked
+reference_solution:
+  final_answer: Booking B2001 is booked.
+  tool_calls:
+  - tool: get_booking
+    arguments:
+      booking_id: B2001

@@ -20,6 +20,7 @@ coverage.xml
 # Local secrets and local gauntlet runs
 .env
 runs/
+site/
 
 # OS and editors
 .DS_Store

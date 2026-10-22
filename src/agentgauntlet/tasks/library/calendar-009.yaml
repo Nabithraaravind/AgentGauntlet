@@ -1,0 +1,22 @@
+id: calendar-009
+domain: calendar_email
+difficulty: medium
+tags:
+- multi-step
+user_goal: Cancel the team standup.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E301
+    status: cancelled
+reference_solution:
+  final_answer: The standup is cancelled.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E301
+  - tool: cancel_event
+    arguments:
+      event_id: E301

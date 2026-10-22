@@ -1,0 +1,19 @@
+id: banking-001
+domain: banking
+difficulty: easy
+tags:
+- lookup
+user_goal: What is the balance of account AC01?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 80000
+reference_solution:
+  final_answer: Account AC01 has 80000 rupees.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC01

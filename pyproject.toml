@@ -1,6 +1,6 @@
 [project]
 name = "agentgauntlet"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "pytest for AI agents: state-based grading, pass^k reliability, cost, and prompt-injection security."
 readme = "README.md"
 license = "MIT"
@@ -9,7 +9,7 @@ requires-python = ">=3.11"
 authors = [{ name = "AgentGauntlet contributors" }]
 keywords = ["agents", "llm", "evaluation", "mcp", "benchmark", "reliability"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -20,10 +20,20 @@ classifiers = [
 # Runtime dependencies are added in the milestone that first imports them.
 dependencies = [
     "faker>=40.43.0",
+    "jinja2>=3.1.6",
+    "litellm>=1.106.0",
     "mcp>=2.3.0",
     "pydantic>=2.14.1",
     "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "typer>=0.27.3",
 ]
+
+[project.scripts]
+gauntlet = "agentgauntlet.cli:main"
+
+[project.entry-points.pytest11]
+gauntlet = "agentgauntlet.pytest_plugin"
 
 [project.urls]
 Homepage = "https://github.com/Nabithraaravind/AgentGauntlet"
@@ -40,8 +50,13 @@ packages = ["src/agentgauntlet"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "src/agentgauntlet/domains/retail/policy.md" = "agentgauntlet/domains/retail/policy.md"
+"src/agentgauntlet/domains/travel/policy.md" = "agentgauntlet/domains/travel/policy.md"
+"src/agentgauntlet/domains/calendar_email/policy.md" = "agentgauntlet/domains/calendar_email/policy.md"
+"src/agentgauntlet/domains/banking/policy.md" = "agentgauntlet/domains/banking/policy.md"
 
 [dependency-groups]
+app = ["gradio>=5.0"]
+docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.27"]
 dev = [
     "mypy>=1.18",
     "pre-commit>=4.2",

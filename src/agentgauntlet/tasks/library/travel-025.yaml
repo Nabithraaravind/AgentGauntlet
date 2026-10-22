@@ -1,0 +1,57 @@
+id: travel-025
+domain: travel
+difficulty: hard
+tags:
+- error-recovery
+- multi-step
+user_goal: Book Ananya on F102. If it is full, book F101 in seat 7A and redeem 100
+  points.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    flight_id: F101
+    seat_code: 7A
+  flights:
+  - id: F101
+    seats_left: 3
+  customers:
+  - id: C003
+    loyalty_points: 1250
+  loyalty_events:
+  - customer_id: C003
+    points: 450
+    kind: earn
+  - customer_id: C003
+    points: 100
+    kind: redeem
+reference_solution:
+  final_answer: F102 was full. Booking B2003 on F101 is in seat 7A, and Ananya has
+    1250 points.
+  tool_calls:
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F102
+    expect_error: full
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F101
+  - tool: assign_seat
+    arguments:
+      booking_id: B2003
+      seat_code: 7A
+  - tool: get_booking
+    arguments:
+      booking_id: B2003
+  - tool: get_flight
+    arguments:
+      flight_id: F101
+  - tool: redeem_points
+    arguments:
+      customer_id: C003
+      points: 100

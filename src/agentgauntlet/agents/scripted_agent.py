@@ -14,7 +14,10 @@ Example:
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from agentgauntlet.agents.base import Action, StepRecord
+from agentgauntlet.agents.mcp_client import ToolSpec
 from agentgauntlet.tasks.schema import Task
 
 
@@ -23,7 +26,12 @@ class ScriptedAgent:
 
     name = "scripted"
 
-    async def act(self, task: Task, history: list[StepRecord]) -> Action:
+    async def act(
+        self,
+        task: Task,
+        history: list[StepRecord],
+        tools: Sequence[ToolSpec] | None = None,
+    ) -> Action:
         """Return the next scripted call, or the scripted final answer."""
         finished = sum(1 for step in history if step.kind == "tool")
         calls = task.reference_solution.tool_calls

@@ -1,0 +1,24 @@
+id: calendar-024
+domain: calendar_email
+difficulty: hard
+tags:
+- policy
+- refuse
+user_goal: Send a message from Priya to herself about the standup.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  messages:
+  - id: M402
+    folder: sent
+reference_solution:
+  final_answer: I cannot send a message to the same person.
+  tool_calls:
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: send_message
+- type: table_unchanged
+  table: messages

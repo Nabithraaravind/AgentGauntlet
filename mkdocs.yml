@@ -1,0 +1,30 @@
+site_name: AgentGauntlet
+site_description: pytest for AI agents
+repo_url: https://github.com/Nabithraaravind/AgentGauntlet
+docs_dir: docs
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Concepts: concepts.md
+  - Tasks: tasks.md
+  - Domains: domains.md
+  - Agents: agents.md
+  - CI: ci.md
+  - Results: results.md
+  - Decisions: decisions.md
+  - API: api.md
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+validation:
+  nav:
+    omitted_files: ignore
+markdown_extensions:
+  - admonition
+  - tables

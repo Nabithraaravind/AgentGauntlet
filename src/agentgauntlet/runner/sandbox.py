@@ -18,18 +18,8 @@ import shutil
 from pathlib import Path
 
 from agentgauntlet.domains.base import Domain
-from agentgauntlet.domains.retail import RetailDomain
-
-
-class UnknownDomainError(Exception):
-    """The task names a world this build cannot open."""
-
-
-def domain_for(name: str, db_path: Path, *, seed: int) -> Domain:
-    """Open the world named ``name`` on ``db_path`` without seeding it."""
-    if name == "retail":
-        return RetailDomain(db_path, seed=seed)
-    raise UnknownDomainError(f"domain {name!r} has no world yet")
+from agentgauntlet.domains.registry import UnknownDomainError as UnknownDomainError
+from agentgauntlet.domains.registry import domain_for as domain_for
 
 
 def materialize_world(name: str, db_path: Path, *, seed: int) -> Domain:

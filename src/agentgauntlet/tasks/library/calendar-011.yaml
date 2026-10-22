@@ -1,0 +1,23 @@
+id: calendar-011
+domain: calendar_email
+difficulty: medium
+tags:
+- ambiguous
+user_goal: Schedule something for me.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E301
+    status: scheduled
+reference_solution:
+  final_answer: What title, date, and location should I use?
+  tool_calls:
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: create_event
+- type: table_unchanged
+  table: events

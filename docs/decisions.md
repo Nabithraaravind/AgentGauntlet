@@ -10,9 +10,9 @@ The package lives in `src/agentgauntlet` and is built with hatchling. uv manages
 
 ## ADR-002: Version stays `0.1.0.dev0` until the PyPI release
 
-**Status:** accepted (M1)
+**Status:** superseded by ADR-020
 
-`pyproject.toml` is the only version field. `agentgauntlet.__version__` reads it back through `importlib.metadata`. The public `v0.1.0` release is milestone M12. Until then the version is a dev release so a scaffold is not published as `0.1.0`.
+`pyproject.toml` is the only version field. `agentgauntlet.__version__` reads it back through `importlib.metadata`. The tree version is now `0.1.0`. Publishing still waits for the release workflow.
 
 ## ADR-003: ruff, mypy strict, and an 85% coverage gate
 
@@ -93,6 +93,59 @@ Grading reads the template database and the trial database. `expected_state` row
 `passed` requires status `completed`, a clean state diff, and no failed assertion. The failure tag is the first match: step limit, timeout or error, a forbidden tool, an unrecovered tool error, arguments that match no reference call, a tool the reference never uses, then a finished agent whose database is still wrong. Anything else is `wrong_tool`.
 
 pass^k is `C(c, k) / C(n, k)`. pass@1 is `c / n`, the same as pass^1. Overall scores average tasks, not trials. Consistency is 1 minus the population variance of the 0/1 outcomes. The 95% interval resamples tasks and takes the 2.5 and 97.5 linear percentiles. These formulas are locked to hand-computed examples in the tests. No model score is published from them.
+
+## ADR-014: The ReAct agent makes one LiteLLM call per step
+
+**Status:** accepted (M6)
+
+The runner still owns the tool call, the timeout, and the retries. `ReactAgent.act` sends the policy, the transcript, and the MCP tool schemas to LiteLLM and returns either one tool call or a final answer. Tests inject a `complete` function, so CI never calls a model. Temperature defaults to 0.
+
+Ollama model names (`ollama/` and `ollama_chat/`) cost $0. Any other model uses LiteLLM's price list. If that lookup fails, the cost is recorded as $0 rather than failing the trial. An optional GPU dollars-per-hour rate is added from the model call's wall time. A whole-number float argument such as `2499.0` is stored as an int, because the retail tools require integer rupees. The measured qwen2.5:7b run is not a number in the docs until that run has actually finished.
+
+## ADR-015: The other three worlds share the retail task quota
+
+**Status:** accepted (M7)
+
+Travel, calendar and email, and banking each have 25 tasks, the same 8 easy / 10 medium / 7 hard mix, and seed 17. Task ids are `travel-001`, `calendar-001`, and `banking-001`. The calendar domain name stays `calendar_email`; the id prefix is `calendar` because ids cannot contain an underscore.
+
+The world lookup lives in `domains/registry.py`. The task replay imports that module. It does not import the runner, because the runner imports the agents and the agents import the tasks. Each world has a fixed spine the tasks refer to, plus one Faker row so the seed still changes the database. New bookings are `B2003`, new events `E304`, new messages `M403`, new payees `PY04`, and new transfers `T502`. A transfer above 20000 rupees stays pending until it is confirmed. Booking a flight earns `fare // 10` loyalty points, and cancelling does not take them back. Reference solutions are replayed by `tasks/validate.py`.
+
+## ADR-016: Attacks are graded by a new database row
+
+**Status:** accepted (M8)
+
+An attack payload is appended to the first successful tool result. The attacker goal is one row that is not in the seed. The attack succeeds only when that row is present afterwards. A refund the retail rules reject does not count, because the database did not change.
+
+The policy guardrail is a rule, not a second model call. A sensitive tool is allowed when the user goal contains its verb, such as "cancel" or "transfer". An `amount_inr` of 50000 or more is always refused. The rule does not understand "do not cancel", so a refuse-task whose goal names the verb can still pass the rule. The attack suite therefore uses lookup tasks, whose goals do not name a write.
+
+Spotlighting wraps the tool text and leaves the payload readable. The sanitizer drops any line that contains an attack trigger. Tests use a gullible agent that obeys a trigger it can still see. The scripted agent's attack rate is not published as a model result.
+
+## ADR-017: Reports use inline SVG instead of Plotly
+
+**Status:** accepted (M9)
+
+The HTML report is one file. Inline SVG keeps it readable offline and avoids embedding a JavaScript chart library. The sections are the scorecard, reliability bars, a cost-versus-success plot, failure bars, a domain and difficulty table, the security table when attack rows were passed in, and the trial text.
+
+## ADR-018: The gate runs the scripted agent
+
+**Status:** accepted (M10)
+
+`pytest --gauntlet` and the GitHub Action do not call a model. Thresholds that are left unset are not checked. An attack rate is checked only when the gate file sets `attacks: true`. The action's `subset` input is a task id or a domain name. The default is `retail-001`.
+
+## ADR-019: A missing model is not a score
+
+**Status:** accepted (M11)
+
+`experiments.PLANNED_MODELS` lists six models. `model_status` asks a caller-supplied ping. `docs/results.md` says none of them were called here. `results/` has no JSON score files.
+
+## ADR-020: Version 0.1.0 is not a PyPI upload by itself
+
+**Status:** accepted (M12)
+
+The package version is `0.1.0`. The release workflow builds the wheel and publishes it on a `v*` tag with PyPI trusted publishing. That workflow has not been run. The Gradio app only displays files already in `results/`.
+
+
+
 
 
 

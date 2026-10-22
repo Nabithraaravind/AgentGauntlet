@@ -1,0 +1,45 @@
+id: banking-025
+domain: banking
+difficulty: hard
+tags:
+- error-recovery
+user_goal: Send 100 rupees from AC03. If it is frozen, send 30000 from AC01 to the
+  landlord and confirm.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 50000
+  - id: AC03
+    frozen: 1
+  transfers:
+  - id: T502
+    amount_inr: 30000
+    status: posted
+reference_solution:
+  final_answer: AC03 is frozen. Transfer T502 for 30000 rupees is posted and the balance
+    is 50000.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC03
+      payee_id: PY01
+      amount_inr: 100
+    expect_error: frozen
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 30000
+  - tool: confirm_transfer
+    arguments:
+      transfer_id: T502
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: list_payees
+    arguments: {}
+  - tool: get_policy
+    arguments: {}

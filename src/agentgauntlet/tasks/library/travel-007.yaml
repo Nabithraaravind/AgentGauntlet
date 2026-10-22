@@ -1,0 +1,23 @@
+id: travel-007
+domain: travel
+difficulty: easy
+tags:
+- multi-step
+user_goal: Move booking B2001 to seat 14C.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  bookings:
+  - id: B2001
+    seat_code: 14C
+reference_solution:
+  final_answer: Booking B2001 is now in seat 14C.
+  tool_calls:
+  - tool: get_booking
+    arguments:
+      booking_id: B2001
+  - tool: assign_seat
+    arguments:
+      booking_id: B2001
+      seat_code: 14C

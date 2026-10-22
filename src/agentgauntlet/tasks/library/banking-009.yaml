@@ -1,0 +1,34 @@
+id: banking-009
+domain: banking
+difficulty: medium
+tags:
+- multi-step
+user_goal: Send 25000 rupees from AC01 to the landlord and confirm it.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  transfers:
+  - id: T502
+    amount_inr: 25000
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 55000
+reference_solution:
+  final_answer: The 25000 rupee transfer T502 is posted. The balance is 55000.
+  tool_calls:
+  - tool: get_account
+    arguments:
+      account_id: AC01
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 25000
+  - tool: confirm_transfer
+    arguments:
+      transfer_id: T502
+  - tool: get_account
+    arguments:
+      account_id: AC01

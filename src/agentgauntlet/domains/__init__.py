@@ -10,6 +10,9 @@ Example:
     world.snapshot()
 """
 
+from agentgauntlet.domains.banking import BankingDomain
+from agentgauntlet.domains.calendar_email import CalendarEmailDomain
 from agentgauntlet.domains.retail import RetailDomain
+from agentgauntlet.domains.travel import TravelDomain
 
-__all__ = ["RetailDomain"]
+__all__ = ["BankingDomain", "CalendarEmailDomain", "RetailDomain", "TravelDomain"]

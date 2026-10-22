@@ -1,0 +1,24 @@
+id: calendar-008
+domain: calendar_email
+difficulty: easy
+tags:
+- multi-step
+user_goal: Invite Arjun to the offsite.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  invites:
+  - event_id: E303
+    contact_id: P002
+    status: pending
+reference_solution:
+  final_answer: Arjun is invited to the offsite.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E303
+  - tool: invite
+    arguments:
+      event_id: E303
+      contact_id: P002

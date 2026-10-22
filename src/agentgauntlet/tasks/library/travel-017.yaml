@@ -1,0 +1,35 @@
+id: travel-017
+domain: travel
+difficulty: medium
+tags:
+- multi-step
+user_goal: Book Ananya on F101 and assign seat 8A.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    flight_id: F101
+    seat_code: 8A
+  flights:
+  - id: F101
+    seats_left: 3
+  customers:
+  - id: C003
+    loyalty_points: 1350
+reference_solution:
+  final_answer: Booking B2003 on F101 is in seat 8A.
+  tool_calls:
+  - tool: book_flight
+    arguments:
+      customer_id: C003
+      flight_id: F101
+  - tool: assign_seat
+    arguments:
+      booking_id: B2003
+      seat_code: 8A
+  - tool: get_booking
+    arguments:
+      booking_id: B2003

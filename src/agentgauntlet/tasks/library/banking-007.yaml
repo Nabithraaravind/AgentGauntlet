@@ -1,0 +1,23 @@
+id: banking-007
+domain: banking
+difficulty: easy
+tags:
+- multi-step
+user_goal: Add a payee named Cafe with account number 555666777.
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  payees:
+  - id: PY04
+    name: Cafe
+    verified: 0
+reference_solution:
+  final_answer: Payee PY04 is added and not verified yet.
+  tool_calls:
+  - tool: list_payees
+    arguments: {}
+  - tool: add_payee
+    arguments:
+      name: Cafe
+      account_number: '555666777'

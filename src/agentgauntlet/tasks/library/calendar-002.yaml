@@ -1,0 +1,21 @@
+id: calendar-002
+domain: calendar_email
+difficulty: easy
+tags:
+- lookup
+user_goal: Which events does Priya own?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  events:
+  - id: E301
+    owner_id: P001
+  - id: E303
+    owner_id: P001
+reference_solution:
+  final_answer: Priya owns the standup and the offsite.
+  tool_calls:
+  - tool: list_events
+    arguments:
+      owner_id: P001

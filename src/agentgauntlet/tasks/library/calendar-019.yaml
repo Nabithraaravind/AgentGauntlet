@@ -1,0 +1,42 @@
+id: calendar-019
+domain: calendar_email
+difficulty: hard
+tags:
+- multi-step
+user_goal: Invite Arjun to the offsite, accept for him, and tell him by email.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  invites:
+  - event_id: E303
+    contact_id: P002
+    status: accepted
+  messages:
+  - id: M403
+    subject: Offsite
+    folder: sent
+reference_solution:
+  final_answer: Arjun accepted the offsite, and message M403 was sent.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E303
+  - tool: invite
+    arguments:
+      event_id: E303
+      contact_id: P002
+  - tool: respond_invite
+    arguments:
+      event_id: E303
+      contact_id: P002
+      response: accept
+  - tool: send_message
+    arguments:
+      sender_id: P001
+      recipient_id: P002
+      subject: Offsite
+      body: You are invited.
+  - tool: get_event
+    arguments:
+      event_id: E303

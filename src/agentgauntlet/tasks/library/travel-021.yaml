@@ -1,0 +1,34 @@
+id: travel-021
+domain: travel
+difficulty: hard
+tags:
+- error-recovery
+user_goal: Cancel B2002. If that is not allowed, book Arjun on F104 instead.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2002
+    status: completed
+  - id: B2003
+    status: booked
+    customer_id: C002
+    flight_id: F104
+  customers:
+  - id: C002
+    loyalty_points: 710
+  flights:
+  - id: F104
+    seats_left: 2
+reference_solution:
+  final_answer: B2002 cannot be cancelled. I booked F104 as B2003 instead.
+  tool_calls:
+  - tool: cancel_booking
+    arguments:
+      booking_id: B2002
+    expect_error: cannot_cancel
+  - tool: book_flight
+    arguments:
+      customer_id: C002
+      flight_id: F104

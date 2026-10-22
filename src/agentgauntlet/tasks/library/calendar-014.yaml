@@ -1,0 +1,24 @@
+id: calendar-014
+domain: calendar_email
+difficulty: medium
+tags:
+- multi-step
+user_goal: Invite contact P101 to the standup.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  invites:
+  - event_id: E301
+    contact_id: P101
+    status: pending
+reference_solution:
+  final_answer: P101 is invited to E301.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E301
+  - tool: invite
+    arguments:
+      event_id: E301
+      contact_id: P101

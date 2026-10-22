@@ -1,0 +1,34 @@
+id: banking-018
+domain: banking
+difficulty: medium
+tags:
+- multi-step
+user_goal: Verify Unknown Shop and send 1500 rupees from AC02.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  payees:
+  - id: PY02
+    verified: 1
+  accounts:
+  - id: AC02
+    balance_inr: 10500
+  transfers:
+  - id: T502
+    payee_id: PY02
+    status: posted
+reference_solution:
+  final_answer: Unknown Shop is now verified and 1500 rupees were sent.
+  tool_calls:
+  - tool: verify_payee
+    arguments:
+      payee_id: PY02
+  - tool: transfer
+    arguments:
+      account_id: AC02
+      payee_id: PY02
+      amount_inr: 1500
+  - tool: get_account
+    arguments:
+      account_id: AC02

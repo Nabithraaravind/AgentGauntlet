@@ -1,0 +1,20 @@
+id: banking-002
+domain: banking
+difficulty: easy
+tags:
+- lookup
+user_goal: Which accounts does Priya Sharma hold?
+user_persona: brief and precise
+seed: 17
+max_steps: 5
+expected_state:
+  accounts:
+  - id: AC01
+    customer_id: C001
+    kind: savings
+reference_solution:
+  final_answer: Priya holds savings account AC01.
+  tool_calls:
+  - tool: list_accounts
+    arguments:
+      customer_id: C001

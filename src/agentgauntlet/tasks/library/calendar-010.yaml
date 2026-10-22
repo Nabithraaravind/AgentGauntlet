@@ -1,0 +1,27 @@
+id: calendar-010
+domain: calendar_email
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Cancel the client review. It already happened.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E302
+    status: past
+reference_solution:
+  final_answer: The client review is past, so it cannot be cancelled.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E302
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: cancel_event
+- type: table_unchanged
+  table: events

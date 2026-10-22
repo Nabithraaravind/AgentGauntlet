@@ -1,0 +1,31 @@
+id: travel-013
+domain: travel
+difficulty: medium
+tags:
+- multi-step
+user_goal: Book Arjun Mehta on flight F101.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    customer_id: C002
+    flight_id: F101
+  flights:
+  - id: F101
+    seats_left: 3
+  customers:
+  - id: C002
+    loyalty_points: 650
+reference_solution:
+  final_answer: Booked F101 for Arjun as B2003.
+  tool_calls:
+  - tool: get_flight
+    arguments:
+      flight_id: F101
+  - tool: book_flight
+    arguments:
+      customer_id: C002
+      flight_id: F101

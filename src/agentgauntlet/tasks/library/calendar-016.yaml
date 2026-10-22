@@ -1,0 +1,27 @@
+id: calendar-016
+domain: calendar_email
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Invite Ananya to the past client review.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  events:
+  - id: E302
+    status: past
+reference_solution:
+  final_answer: The client review is past, so I cannot add an invite.
+  tool_calls:
+  - tool: get_event
+    arguments:
+      event_id: E302
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: invite
+- type: table_unchanged
+  table: invites

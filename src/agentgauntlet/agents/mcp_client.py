@@ -30,6 +30,15 @@ _RETRYABLE = "This error is retryable."
 
 
 @dataclass(frozen=True)
+class ToolSpec:
+    """The name, description, and JSON schema of one MCP tool."""
+
+    name: str
+    description: str
+    parameters: dict[str, object]
+
+
+@dataclass(frozen=True)
 class ToolOutcome:
     """What one tool call, including retries, returned."""
 
@@ -54,8 +63,17 @@ class ToolSession:
 
     async def list_tools(self) -> list[str]:
         """Return the tool names the server advertised."""
+        specs = await self.list_tool_specs()
+        return [spec.name for spec in specs]
+
+    async def list_tool_specs(self) -> list[ToolSpec]:
+        """Return the name, description, and JSON schema of each tool."""
         listed = await self._client.list_tools()
-        return [tool.name for tool in listed.tools]
+        specs: list[ToolSpec] = []
+        for tool in listed.tools:
+            description = tool.description or ""
+            specs.append(ToolSpec(tool.name, description, _parameters(tool.input_schema)))
+        return specs
 
     async def call(self, tool: str, arguments: dict[str, JsonScalar]) -> ToolOutcome:
         """Call ``tool``. Retry while the error says it is retryable."""
@@ -79,6 +97,12 @@ class ToolSession:
                 attempts=attempt,
                 latency_ms=latency_ms,
             )
+
+
+def _parameters(schema: object) -> dict[str, object]:
+    if not isinstance(schema, dict):
+        return {}
+    return {str(key): value for key, value in schema.items()}
 
 
 def message_text(result: CallToolResult) -> str:

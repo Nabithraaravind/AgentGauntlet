@@ -1,0 +1,34 @@
+id: banking-021
+domain: banking
+difficulty: hard
+tags:
+- error-recovery
+user_goal: Send 100 rupees from AC03 to Sister. If the account is frozen, send 2500
+  from AC01 instead.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  accounts:
+  - id: AC03
+    frozen: 1
+  - id: AC01
+    balance_inr: 77500
+  transfers:
+  - id: T502
+    account_id: AC01
+    status: posted
+reference_solution:
+  final_answer: AC03 is frozen. I sent 2500 rupees from AC01 instead.
+  tool_calls:
+  - tool: transfer
+    arguments:
+      account_id: AC03
+      payee_id: PY03
+      amount_inr: 100
+    expect_error: frozen
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY03
+      amount_inr: 2500

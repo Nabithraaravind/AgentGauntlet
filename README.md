@@ -8,7 +8,7 @@ AgentGauntlet is pytest for AI agents. It runs your agent through 100 stateful, 
 
 **Headline result:** TBD. No model has been measured yet. Numbers will show up here only after a real run is recorded.
 
-**Status:** milestones M1 through M5 are in the tree. The retail world is a SQLite database with eight MCP tools. Twenty-five retail tasks each include a reference solution. The scripted agent plays those solutions through the runner, one fresh database per trial, and writes a JSONL trajectory. Grading then checks that database: expected rows must be present, and extra writes fail the trial. Metrics include pass@1, pass^k, and a bootstrap interval. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. GitHub Actions runs the same commands on push. The other domains, the security suite, and the reports are not built yet. PyPI, coverage, and Hugging Face badges land when those exist.
+**Status:** the library, runner, grading, ReAct agent, injection suite, HTML report, and `gauntlet` command are in the tree. Four worlds have 25 tasks each. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. No model score is recorded. Ollama is not installed on the machine that built this tree, so the qwen run and the 4–6 model comparison are not numbers yet. PyPI publish is the release workflow on a `v*` tag. Until that tag is pushed, install from a checkout.
 
 ## Why AgentGauntlet?
 
@@ -19,16 +19,17 @@ AgentGauntlet is pytest for AI agents. It runs your agent through 100 stateful, 
 
 ## Quickstart
 
-`pip install agentgauntlet` arrives with the M12 release. Until then, install from a checkout:
+Install from a checkout. `pip install agentgauntlet` works after the release workflow publishes a `v*` tag.
 
 ```bash
 uv sync
 uv run pytest
 uv run python tasks/validate.py
-uv run python -m agentgauntlet.runner --run-id smoke --k 1 --tasks retail-001
+uv run gauntlet run --tasks retail-001 --k 1 --run-id smoke
+uv run gauntlet report runs/smoke --html
 ```
 
-`python -m agentgauntlet.runner` runs the scripted agent and writes JSONL trajectories under `runs/`. The Typer `gauntlet` command is not implemented yet. A real local model lands with M6.
+`gauntlet run` uses the scripted agent. Add `--agent react --model ollama/qwen2.5:7b-instruct` to call a local model. A measured model score stays TBD until a real run is recorded.
 
 ## Results
 
@@ -36,11 +37,13 @@ TBD. The leaderboard, reliability-decay chart, and cost-versus-success chart wil
 
 ## Security
 
-TBD. The guardrail comparison (attack success rate, utility under attack, extra cost) lands in M8.
+Eight indirect-injection templates cover a direct override, a fake system line, role-play, a base64 payload, data exfiltration, a tool hijack, a delayed trigger, and Hindi/Hinglish. Attack success means the attacker's database row appeared. Utility means the original task still passed.
+
+The guardrails are none, spotlighting, a sanitizer that drops trigger lines, and a rule that blocks a sensitive write the user did not ask for. In unit tests, a gullible agent that obeys the trigger is stopped by the sanitizer and by that rule. The scripted agent ignores tool text, so its attack success rate on those tests is 0. That is not a model score. A model comparison is TBD.
 
 ## Architecture
 
-Target layout. Only the package entry point exists today.
+The command line, the runner, the four worlds, grading, the injection suite, and the HTML report are in the package. The Gradio app reads `results/` and does not call a model.
 
 ```mermaid
 flowchart LR
@@ -57,30 +60,30 @@ flowchart LR
 
 ## Custom tasks, domains, and agents
 
-Not available yet. Authoring guides are part of the docs site (M12). Short examples will live under `examples/`.
+See [examples/README.md](examples/README.md) and the docs pages for tasks, domains, and agents. `gauntlet init` writes a starter gate file.
 
 ## CI
 
 This repository's workflow (`.github/workflows/ci.yml`) runs ruff, mypy, and pytest on Python 3.11 and 3.12.
 
-The reusable action other repos will call is M10. The intended shape is:
+`action.yml` is the reusable action. This repository calls it from `.github/workflows/gauntlet.yml`.
 
 ```yaml
 - uses: Nabithraaravind/AgentGauntlet@v1
   with:
-    agent: my_pkg.agents:MyAgent
-    subset: smoke
+    subset: retail-001
+    k: "1"
 ```
 
-That action does not exist yet.
+`pytest --gauntlet --gauntlet-config gauntlet.yaml` exits if a threshold is missed. The scripted agent is what that gate runs.
 
 ## Methodology and limitations
 
-Grading will compare the final database to a partial expected state and flag unexpected writes. pass^k will use the unbiased combinatorial estimator. Those definitions, and the limits of mock worlds versus production tools, will be written up with the first real results. Nothing here is a measured claim.
+Grading compares the final database to a partial expected state and flags unexpected writes. pass^k is `C(c, k) / C(n, k)`. Mock worlds are not production tools: a refund that the retail rules reject cannot land, so an attack that the rules refuse is not a successful attack. Nothing in this file is a measured model claim.
 
 ## What didn't work
 
-TBD. Dead ends get a paragraph when they actually happen.
+Ollama is not installed here, and the binaries were not at the usual Windows paths. The ReAct agent is tested with a fake completer. The measured qwen2.5:7b run, and the wider model matrix, are blocked on installing Ollama or setting an API key. A 30 second trial timeout also expired once when two full pytest processes ran at the same time. A later run of the suite by itself passed. That timeout was not changed.
 
 ## Roadmap
 
@@ -91,13 +94,13 @@ TBD. Dead ends get a paragraph when they actually happen.
 | M3 | Task schema and 25 retail tasks | Local checks green |
 | M4 | Scripted agent and runner | Local checks green |
 | M5 | State grading and pass^k | Local checks green |
-| M6 | ReAct agent, Ollama, cost | Not started |
-| M7 | Four domains, 100 tasks | Not started |
-| M8 | Injection suite and guardrails | Not started |
-| M9 | HTML report and compare | Not started |
-| M10 | pytest plugin and GitHub Action | Not started |
-| M11 | Measured runs on 4–6 models | Not started |
-| M12 | Gradio app, docs site, PyPI v0.1.0 | Not started |
+| M6 | ReAct agent, Ollama, cost | Agent tested; measured run not recorded |
+| M7 | Four domains, 100 tasks | Local checks green |
+| M8 | Injection suite and guardrails | Local checks green; model table not recorded |
+| M9 | HTML report and compare | Local checks green |
+| M10 | pytest plugin and GitHub Action | Local checks green |
+| M11 | Measured runs on 4–6 models | Write-up recorded; no model was available |
+| M12 | Gradio app, docs site, PyPI v0.1.0 | App and docs in tree; publish waits on a v* tag |
 
 ## Contributing
 
@@ -105,7 +108,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Decisions that are easy to miss are in [
 
 ## Citation
 
-`CITATION.cff` arrives with the M12 release.
+See [CITATION.cff](CITATION.cff).
 
 ## License
 

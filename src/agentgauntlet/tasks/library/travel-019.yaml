@@ -1,0 +1,49 @@
+id: travel-019
+domain: travel
+difficulty: hard
+tags:
+- multi-step
+user_goal: Book Arjun on F104 in seat 2A and redeem 100 points.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  bookings:
+  - id: B2003
+    status: booked
+    customer_id: C002
+    seat_code: 2A
+  flights:
+  - id: F104
+    seats_left: 2
+  customers:
+  - id: C002
+    loyalty_points: 610
+  loyalty_events:
+  - customer_id: C002
+    points: 510
+    kind: earn
+  - customer_id: C002
+    points: 100
+    kind: redeem
+reference_solution:
+  final_answer: Booking B2003 is in seat 2A, and Arjun has 610 points.
+  tool_calls:
+  - tool: get_flight
+    arguments:
+      flight_id: F104
+  - tool: book_flight
+    arguments:
+      customer_id: C002
+      flight_id: F104
+  - tool: assign_seat
+    arguments:
+      booking_id: B2003
+      seat_code: 2A
+  - tool: redeem_points
+    arguments:
+      customer_id: C002
+      points: 100
+  - tool: get_booking
+    arguments:
+      booking_id: B2003

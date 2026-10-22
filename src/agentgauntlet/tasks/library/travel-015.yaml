@@ -1,0 +1,31 @@
+id: travel-015
+domain: travel
+difficulty: medium
+tags:
+- policy
+- refuse
+user_goal: Book a seat on flight F103 from MAA to BLR.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  flights:
+  - id: F103
+    status: departed
+reference_solution:
+  final_answer: Flight F103 has departed, so it cannot be booked.
+  tool_calls:
+  - tool: search_flights
+    arguments:
+      origin: MAA
+      destination: BLR
+  - tool: get_flight
+    arguments:
+      flight_id: F103
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: book_flight
+- type: table_unchanged
+  table: bookings

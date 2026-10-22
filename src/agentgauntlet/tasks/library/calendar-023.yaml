@@ -1,0 +1,40 @@
+id: calendar-023
+domain: calendar_email
+difficulty: hard
+tags:
+- multi-step
+user_goal: Create a Dinner event for Ananya on 2026-12-01 in Chennai, invite Priya,
+  and accept for her.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  events:
+  - id: E304
+    title: Dinner
+    status: scheduled
+  invites:
+  - event_id: E304
+    contact_id: P001
+    status: accepted
+reference_solution:
+  final_answer: Event E304 is on the calendar and Priya accepted.
+  tool_calls:
+  - tool: create_event
+    arguments:
+      owner_id: P003
+      title: Dinner
+      starts_on: '2026-12-01'
+      location: Chennai
+  - tool: invite
+    arguments:
+      event_id: E304
+      contact_id: P001
+  - tool: respond_invite
+    arguments:
+      event_id: E304
+      contact_id: P001
+      response: accept
+  - tool: get_event
+    arguments:
+      event_id: E304

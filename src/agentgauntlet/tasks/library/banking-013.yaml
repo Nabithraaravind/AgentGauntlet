@@ -1,0 +1,38 @@
+id: banking-013
+domain: banking
+difficulty: medium
+tags:
+- multi-step
+user_goal: Add Cafe account 555666777, verify it, and send 3000 rupees from AC02.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  payees:
+  - id: PY04
+    verified: 1
+  accounts:
+  - id: AC02
+    balance_inr: 9000
+  transfers:
+  - id: T502
+    amount_inr: 3000
+    status: posted
+reference_solution:
+  final_answer: Cafe PY04 is verified, and 3000 rupees were sent. The balance is 9000.
+  tool_calls:
+  - tool: add_payee
+    arguments:
+      name: Cafe
+      account_number: '555666777'
+  - tool: verify_payee
+    arguments:
+      payee_id: PY04
+  - tool: transfer
+    arguments:
+      account_id: AC02
+      payee_id: PY04
+      amount_inr: 3000
+  - tool: get_account
+    arguments:
+      account_id: AC02

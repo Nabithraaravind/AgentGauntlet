@@ -1,0 +1,23 @@
+id: banking-011
+domain: banking
+difficulty: medium
+tags:
+- ambiguous
+user_goal: Send some money.
+user_persona: brief and precise
+seed: 17
+max_steps: 10
+expected_state:
+  accounts:
+  - id: AC01
+    balance_inr: 80000
+reference_solution:
+  final_answer: Which account, payee, and amount should I use?
+  tool_calls:
+  - tool: get_policy
+    arguments: {}
+assertions:
+- type: tool_not_called
+  tool: transfer
+- type: table_unchanged
+  table: transfers

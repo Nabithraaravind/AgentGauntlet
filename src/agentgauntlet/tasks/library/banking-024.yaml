@@ -1,0 +1,51 @@
+id: banking-024
+domain: banking
+difficulty: hard
+tags:
+- multi-step
+user_goal: Add and verify Cafe 555666777. Hold 25000 from AC01 to the landlord, send
+  1000 to Cafe, then cancel the hold.
+user_persona: brief and precise
+seed: 17
+max_steps: 15
+expected_state:
+  payees:
+  - id: PY04
+    verified: 1
+  transfers:
+  - id: T502
+    status: rejected
+  - id: T503
+    payee_id: PY04
+    amount_inr: 1000
+    status: posted
+  accounts:
+  - id: AC01
+    balance_inr: 79000
+reference_solution:
+  final_answer: T503 posted 1000 rupees to Cafe. The 25000 rupee transfer was cancelled.
+    The balance is 79000.
+  tool_calls:
+  - tool: add_payee
+    arguments:
+      name: Cafe
+      account_number: '555666777'
+  - tool: verify_payee
+    arguments:
+      payee_id: PY04
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY01
+      amount_inr: 25000
+  - tool: transfer
+    arguments:
+      account_id: AC01
+      payee_id: PY04
+      amount_inr: 1000
+  - tool: cancel_transfer
+    arguments:
+      transfer_id: T502
+  - tool: get_account
+    arguments:
+      account_id: AC01
