@@ -8,7 +8,7 @@ AgentGauntlet is pytest for AI agents. It runs your agent through 100 stateful, 
 
 **Headline result:** `ollama/qwen2.5:7b-instruct` on retail, k=3: **pass@1 = 0.467** (bootstrap 95% CI 0.280–0.640), pass^3 = 0.400, ASR = 0.000, cost per success = $0. Run id `qwen-retail-k3`. Numbers are from a real local Ollama run; see `results/ollama-qwen2.5-7b-instruct.json`.
 
-**Status:** the library, runner, grading, ReAct agent, injection suite, HTML report, and `gauntlet` command are in the tree. Four worlds have 25 tasks each. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. The qwen retail k=3 score and its injection ASR table are recorded. Other planned models are still pending. The PyPI name `agentgauntlet` is already taken by an unrelated package, so publishing this project needs a rename or a name transfer before a `v*` tag can land on PyPI.
+**Status:** the library, runner, grading, ReAct agent, injection suite, HTML report, and `gauntlet` command are in the tree. Four worlds have 25 tasks each. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. Measured retail k=3 scores are recorded for qwen and llama3.2:3b; remaining planned Ollama models are in progress or pending. Groq was not run (`GROQ_API_KEY` unset). The PyPI name `agentgauntlet` is already taken by an unrelated package, so publishing this project needs a rename or a name transfer before a `v*` tag can land on PyPI.
 
 ## Why AgentGauntlet?
 
@@ -36,8 +36,9 @@ uv run gauntlet report runs/smoke --html
 | Model | pass@1 | pass^3 | ASR | Cost / success | Run |
 | --- | ---: | ---: | ---: | ---: | --- |
 | ollama/qwen2.5:7b-instruct | 0.467 | 0.400 | 0.000 | $0 | `qwen-retail-k3` |
+| ollama/llama3.2:3b | 0.040 | 0.040 | — | $0 | `llama32-retail-k3` |
 
-Retail only, k=3, 25 tasks, 75 trials. Dominant failure tags: gave_up (11), step_limit (9), policy_violation (8), wrong_args (6). pass^5 is 0 because k was 3. ASR is from 8 attacks × 4 guardrails (32 trials); the model never wrote an attacker row, and utility under attack was also 0 on those lookup tasks. Other planned models are not graded yet.
+Retail only, k=3, 25 tasks, 75 trials each. pass^5 is 0 because k was 3. Qwen ASR is from 8 attacks × 4 guardrails. llama3.2:3b ASR was not measured; its retail run was dominated by step_limit (43) and gave_up (20).
 
 ## Security
 
@@ -103,7 +104,7 @@ The first `ollama pull qwen2.5:7b-instruct` failed mid-download with a DNS error
 | M8 | Injection suite and guardrails | qwen ASR 0.000 recorded |
 | M9 | HTML report and compare | Local checks green |
 | M10 | pytest plugin and GitHub Action | Local checks green |
-| M11 | Measured runs on 4–6 models | qwen recorded; other models pending |
+| M11 | Measured runs on 4–6 models | qwen + llama3.2 recorded; others pending |
 | M12 | Gradio app, docs site, PyPI v0.1.0 | App and docs in tree; PyPI name taken |
 
 ## Contributing

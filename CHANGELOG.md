@@ -18,6 +18,6 @@ and the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Injection suite. Eight attack templates, attack-success and utility rates, and three guardrails: spotlighting, a trigger-line sanitizer, and a rule that blocks a sensitive write the user did not ask for. Tests use a scripted agent and a gullible fake. A measured qwen ASR table scored 0.000 (`results/ollama-qwen2.5-7b-instruct-asr.json`).
 - HTML report, Markdown leaderboard, and a compare command. Charts are inline SVG so the report is one file and does not call a CDN.
 - `gauntlet` command, `pytest --gauntlet` thresholds, and a composite GitHub Action that writes a Markdown score.
-- Experiment list and `docs/results.md`. The qwen retail run is written up there. Other planned models and Groq are still pending.
+- Experiment list and `docs/results.md`. Measured retail k=3 scores for qwen (pass@1 0.467) and llama3.2:3b (pass@1 0.040) are written up there. Groq was not run (`GROQ_API_KEY` unset).
 - Gradio leaderboard over `results/`, MkDocs pages, `CITATION.cff`, and a PyPI release workflow for a `v*` tag. The version in the tree is 0.1.0. Publishing under the name `agentgauntlet` is blocked because that name is already taken on PyPI by an unrelated package.
 - `tasks/record_run.py` and `tasks/measure_asr.py` helpers to grade a finished run and to measure the injection table against a real model.
