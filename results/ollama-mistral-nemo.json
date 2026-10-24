@@ -1,0 +1,25 @@
+{
+  "model": "ollama/mistral-nemo",
+  "pass_at_1": 0.04,
+  "pass_hat_5": 0.0,
+  "asr": null,
+  "cost_per_success": 0.0,
+  "pass_hat": {
+    "1": 0.04,
+    "2": 0.04,
+    "3": 0.04,
+    "4": 0.0,
+    "5": 0.0
+  },
+  "interval": [
+    0.0,
+    0.12
+  ],
+  "failures": {
+    "gave_up": 69,
+    "wrong_args": 3
+  },
+  "run_id": "mistral-nemo-retail-k3",
+  "tasks": 25,
+  "trials": 75
+}

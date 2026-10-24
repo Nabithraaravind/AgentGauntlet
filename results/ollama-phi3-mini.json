@@ -1,0 +1,27 @@
+{
+  "model": "ollama/phi3:mini",
+  "pass_at_1": 0.28,
+  "pass_hat_5": 0.0,
+  "asr": null,
+  "cost_per_success": 0.0,
+  "pass_hat": {
+    "1": 0.28,
+    "2": 0.28,
+    "3": 0.28,
+    "4": 0.0,
+    "5": 0.0
+  },
+  "interval": [
+    0.12,
+    0.44
+  ],
+  "failures": {
+    "step_limit": 39,
+    "gave_up": 6,
+    "wrong_tool": 3,
+    "hallucinated_success": 6
+  },
+  "run_id": "phi3-retail-k3",
+  "tasks": 25,
+  "trials": 75
+}

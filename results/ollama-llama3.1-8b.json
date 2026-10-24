@@ -1,0 +1,26 @@
+{
+  "model": "ollama/llama3.1:8b",
+  "pass_at_1": 0.04,
+  "pass_hat_5": 0.0,
+  "asr": null,
+  "cost_per_success": 0.0,
+  "pass_hat": {
+    "1": 0.04,
+    "2": 0.04,
+    "3": 0.04,
+    "4": 0.0,
+    "5": 0.0
+  },
+  "interval": [
+    0.0,
+    0.16
+  ],
+  "failures": {
+    "step_limit": 48,
+    "gave_up": 23,
+    "policy_violation": 1
+  },
+  "run_id": "llama31-retail-k3",
+  "tasks": 25,
+  "trials": 75
+}
