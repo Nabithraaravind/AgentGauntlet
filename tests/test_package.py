@@ -21,7 +21,7 @@ def test_version_matches_pyproject() -> None:
         declared = tomllib.load(handle)["project"]["version"]
 
     assert agentgauntlet.__version__ == declared
-    assert agentgauntlet.__version__ == version("agentgauntlet")
+    assert agentgauntlet.__version__ == version("agent-gauntlet")
 
 
 def test_public_api_lists_version() -> None:

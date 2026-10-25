@@ -1,6 +1,6 @@
 # Getting started
 
-Install from a checkout. The PyPI upload runs from the release workflow when a `v*` tag is pushed and trusted publishing is configured. Until that tag exists, `pip install agentgauntlet` does not fetch this package.
+Install from a checkout. The PyPI upload runs from the release workflow when a `v*` tag is pushed and trusted publishing is configured. After that tag publishes, install with `pip install agent-gauntlet` and import `agentgauntlet`.
 
 ```bash
 uv sync

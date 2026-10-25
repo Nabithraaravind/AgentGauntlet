@@ -8,7 +8,7 @@ AgentGauntlet is pytest for AI agents. It runs your agent through 100 stateful, 
 
 **Headline result:** `ollama/qwen2.5:7b-instruct` on retail, k=3: **pass@1 = 0.467** (bootstrap 95% CI 0.280–0.640), pass^3 = 0.400, ASR = 0.000, cost per success = $0. Run id `qwen-retail-k3`. Numbers are from a real local Ollama run; see `results/ollama-qwen2.5-7b-instruct.json`.
 
-**Status:** the library, runner, grading, ReAct agent, injection suite, HTML report, and `gauntlet` command are in the tree. Four worlds have 25 tasks each. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. Measured retail k=3 scores are recorded for all five planned Ollama models. Groq was not run (`GROQ_API_KEY` unset). The PyPI name `agentgauntlet` is already taken by an unrelated package, so publishing this project needs a rename or a name transfer before a `v*` tag can land on PyPI.
+**Status:** the library, runner, grading, ReAct agent, injection suite, HTML report, and `gauntlet` command are in the tree. Four worlds have 25 tasks each. Ruff, mypy, pytest, and `tasks/validate.py` pass locally. Measured retail k=3 scores are recorded for all five planned Ollama models. Groq was not run (`GROQ_API_KEY` unset). The PyPI distribution name is `agent-gauntlet` (the import package stays `agentgauntlet`) because `agentgauntlet` on PyPI is an unrelated chaos-engineering package.
 
 ## Why AgentGauntlet?
 
@@ -19,7 +19,7 @@ AgentGauntlet is pytest for AI agents. It runs your agent through 100 stateful, 
 
 ## Quickstart
 
-Install from a checkout. `pip install agentgauntlet` works after the release workflow publishes a `v*` tag.
+Install from a checkout. After a `v*` tag publishes, install with `pip install agent-gauntlet` (then `import agentgauntlet`).
 
 ```bash
 uv sync
@@ -91,7 +91,7 @@ Grading compares the final database to a partial expected state and flags unexpe
 
 ## What didn't work
 
-The first `ollama pull qwen2.5:7b-instruct` failed mid-download with a DNS error against Cloudflare R2; a retry succeeded. A smoke trial of `llama3.2:3b` on retail-001 hit the step limit after getting the right order status and never returned a final answer. Publishing to PyPI under the name `agentgauntlet` is blocked: that name is already taken on PyPI by an unrelated chaos-engineering package at version 0.2.0. Groq was not run because `GROQ_API_KEY` is not set. A 30 second trial timeout also expired once when two full pytest processes ran at the same time; that timeout was not changed.
+The first `ollama pull qwen2.5:7b-instruct` failed mid-download with a DNS error against Cloudflare R2; a retry succeeded. A smoke trial of `llama3.2:3b` on retail-001 hit the step limit after getting the right order status and never returned a final answer. The distribution name on PyPI is `agent-gauntlet` because `agentgauntlet` was already taken by an unrelated chaos-engineering package at version 0.2.0. Groq was not run because `GROQ_API_KEY` is not set. A 30 second trial timeout also expired once when two full pytest processes ran at the same time; that timeout was not changed.
 
 ## Roadmap
 
@@ -108,7 +108,7 @@ The first `ollama pull qwen2.5:7b-instruct` failed mid-download with a DNS error
 | M9 | HTML report and compare | Local checks green |
 | M10 | pytest plugin and GitHub Action | Local checks green |
 | M11 | Measured runs on 4–6 models | 5 Ollama models recorded; Groq skipped (no API key) |
-| M12 | Gradio app, docs site, PyPI v0.1.0 | App and docs in tree; PyPI name taken |
+| M12 | Gradio app, docs site, PyPI v0.1.0 | App and docs in tree; dist renamed to `agent-gauntlet` |
 
 ## Contributing
 

@@ -17,6 +17,6 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-__version__ = version("agentgauntlet")
+__version__ = version("agent-gauntlet")
 
 __all__ = ["__version__"]

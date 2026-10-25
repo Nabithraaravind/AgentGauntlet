@@ -1,5 +1,5 @@
 [project]
-name = "agentgauntlet"
+name = "agent-gauntlet"
 version = "0.1.0"
 description = "pytest for AI agents: state-based grading, pass^k reliability, cost, and prompt-injection security."
 readme = "README.md"

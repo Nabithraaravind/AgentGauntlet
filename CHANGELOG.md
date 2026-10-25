@@ -19,5 +19,5 @@ and the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - HTML report, Markdown leaderboard, and a compare command. Charts are inline SVG so the report is one file and does not call a CDN.
 - `gauntlet` command, `pytest --gauntlet` thresholds, and a composite GitHub Action that writes a Markdown score.
 - Experiment list and `docs/results.md`. Measured retail k=3 scores for qwen (pass@1 0.467), phi3:mini (pass@1 0.280), llama3.2:3b (pass@1 0.040), llama3.1:8b (pass@1 0.040), and mistral-nemo (pass@1 0.040) are written up there. Groq was not run (`GROQ_API_KEY` unset).
-- Gradio leaderboard over `results/`, MkDocs pages, `CITATION.cff`, and a PyPI release workflow for a `v*` tag. The version in the tree is 0.1.0. Publishing under the name `agentgauntlet` is blocked because that name is already taken on PyPI by an unrelated package.
+- Gradio leaderboard over `results/`, MkDocs pages, `CITATION.cff`, and a PyPI release workflow for a `v*` tag. The version in the tree is 0.1.0. The PyPI distribution name is `agent-gauntlet` (import package `agentgauntlet`) because `agentgauntlet` on PyPI belongs to an unrelated package.
 - `tasks/record_run.py` and `tasks/measure_asr.py` helpers to grade a finished run and to measure the injection table against a real model.

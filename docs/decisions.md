@@ -140,15 +140,21 @@ The HTML report is one file. Inline SVG keeps it readable offline and avoids emb
 
 ## ADR-020: Version 0.1.0 is not a PyPI upload by itself
 
-**Status:** accepted (M12), blocked on the package name
+**Status:** superseded by ADR-022
 
-The package version is `0.1.0`. The release workflow builds the wheel and publishes it on a `v*` tag with PyPI trusted publishing. The GitHub environment `pypi` exists. Publishing is still blocked: the name `agentgauntlet` on PyPI belongs to an unrelated chaos-engineering project at version 0.2.0. This repo must rename its distribution or obtain that name before a `v*` tag can publish.
+The package version is `0.1.0`. The release workflow builds the wheel and publishes it on a `v*` tag with PyPI trusted publishing. The GitHub environment `pypi` exists. The original distribution name `agentgauntlet` could not be used on PyPI.
 
 ## ADR-021: Helpers for recording measured runs
 
 **Status:** accepted
 
 `tasks/record_run.py` grades a finished run directory into `results/`. `tasks/measure_asr.py` runs every attack and guardrail for one model. Both write only after a real call finishes.
+
+## ADR-022: PyPI distribution name is agent-gauntlet
+
+**Status:** accepted (M12)
+
+`pyproject.toml` sets the distribution name to `agent-gauntlet`. The import path and console scripts stay under `agentgauntlet` / `gauntlet`. That avoids colliding with the unrelated PyPI project `agentgauntlet` 0.2.0 (chaos engineering). Install with `pip install agent-gauntlet`. A first publish still needs a trusted publisher (or token) registered for the new project name on PyPI.
 
 
 

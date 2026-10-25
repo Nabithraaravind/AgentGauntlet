@@ -18,7 +18,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "agentgauntlet"
+name = "agent-gauntlet"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
